@@ -38,11 +38,16 @@ def cv_splitter(X, y, k):
 # Part (b)
 def MAE(y, y_hat):
     # WRITE YOUR CODE HERE...
+    # can i use np.mean??????
+    return np.mean(np.abs(y - y_hat))
+
 
 
 
 def MaxError(y, y_hat):
     # WRITE YOUR CODE HERE...
+    # can i use np.max??????
+    return np.max(np.abs(y - y_hat))
 
 
 
@@ -55,10 +60,31 @@ def cross_validate_ridge(X, y, lambda_list, k, metric):
     Returns the lambda with best average score and a dictionary of mean scores.
     """
     # WRITE YOUR CODE HERE...
+    folds = cv_splitter(X, y, k)
+    #  metric operation switch case 
+    if metric == "MAE":
+        metric_op = MAE
+    elif metric == "MaxError":
+        metric_op = MaxError
+    elif metric == "RMSE":
+        metric_op = rmse
+
+    avgs_dict = {}
+
+    for lamb in lambda_list:
+        scores = []
+        for X_train, y_train, X_test, y_test in folds:
+            w_ridge = ridge_regression_optimize(X_train, y_train, lamb)
+            y_pred = np.dot(X_test, w_ridge)
+            scores.append(metric_op(y_test, y_pred))
+        avgs_dict[lamb] = np.mean(scores)
+
+    best_lamb = min(avgs_dict, key=avgs_dict.get)
+    return best_lamb, avgs_dict
 
 
 
-# Remove the following line if you are not using it:
-if __name__ == "__main__":
-    # If you want to test your functions, write your code here.
-    # If you write it outside this snippet, the autograder will fail!
+# # Remove the following line if you are not using it:
+# if __name__ == "__main__":
+#     # If you want to test your functions, write your code here.
+#     # If you write it outside this snippet, the autograder will fail!

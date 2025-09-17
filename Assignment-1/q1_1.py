@@ -25,7 +25,7 @@ def linear_regression_optimize(X: np.ndarray, y: np.ndarray) -> np.ndarray:
     w = np.linalg.inv(w)
     w = np.dot(w, X_T)
     w_star = np.dot(w, y)
-    return w_star
+    return w_star.flatten()
 
 
 # Part (c)
@@ -38,7 +38,7 @@ def ridge_regression_optimize(X: np.ndarray, y: np.ndarray, lamb: float) -> np.n
     w = np.linalg.inv(w)
     w = np.dot(w, X_T)
     w_star = np.dot(w, y)
-    return w_star
+    return w_star.flatten()
 
 # Part (e)
 def weighted_ridge_regression_optimize(X: np.ndarray, y: np.ndarray, lambda_vec: np.ndarray) -> np.ndarray:
@@ -50,7 +50,7 @@ def weighted_ridge_regression_optimize(X: np.ndarray, y: np.ndarray, lambda_vec:
     w = np.dot(w, X_T)
     w_star = np.dot(w, y)
     
-    return w_star
+    return w_star.flatten()
 
 # Part (f)
 def predict(X: np.ndarray, w: np.ndarray) -> np.ndarray:
@@ -62,18 +62,23 @@ def predict(X: np.ndarray, w: np.ndarray) -> np.ndarray:
 def rmse(y: np.ndarray, y_hat: np.ndarray) -> float:
     """Root mean squared error"""
     # WRITE YOUR CODE HERE...
+
+    # testing error gradescope
+    # y = y.flatten()
+    # y_hat = y_hat.flatten()
+    
     n = len(y)
-    sum = 0
+    sum= 0
     for i in range(n):
         sum += (y[i] - y_hat[i]) ** 2
-    RMSE = (sum / n) ** (1/2)
-    return RMSE[0]
+    RMSE = (sum / n) ** 0.5
+    return float(RMSE)
 
 
 
-# Remove the following line if you are not using it:
-if __name__ == "__main__":
+# # Remove the following line if you are not using it:
+# if __name__ == "__main__":
 
-    # If you want to test your functions, write your code here.
-    # If you write it outside this snippet, the autograder will fail!
-    pass
+#     # If you want to test your functions, write your code here.
+#     # If you write it outside this snippet, the autograder will fail!
+#     pass
