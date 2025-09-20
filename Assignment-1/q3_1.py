@@ -30,8 +30,8 @@ def learning_rate_cosine_annealing(eta0: float, t: int, T: int) -> float:
 # Part (d)
 def gradient_step(X: np.ndarray, y: np.ndarray, w: np.ndarray, lamb:float, eta: float) -> np.ndarray:
     # WRITE YOUR CODE HERE...
-    grad = ridge_gradient(X, y, w, lamb)
-    return w - eta * grad
+    gradient = ridge_gradient(X, y, w, lamb)
+    return w - eta * gradient
 
 
 # Part (e)
@@ -39,7 +39,17 @@ def gradient_descent_ridge(X, y, lamb=1.0, eta0=0.1, T=500, schedule="constant",
     # WRITE YOUR CODE HERE...
     m = X.shape[1]
     w = np.zeros((m, 1))
+    L = []
+    
     for t in range(T):
+        # (See report) for explanation of ridge regression loss = (1/n)||y - Xw||^2 + λ||w||^2
+        n = X.shape[0]
+        residuals = y - np.dot(X, w)
+        mse_loss = (1/n) * np.sum(residuals**2)
+        regularization = lamb * np.sum(w**2)
+        loss = mse_loss + regularization
+        L.append(loss)
+        
         if schedule == "constant":
             eta = eta0
         elif schedule == "exp_decay":
@@ -48,7 +58,7 @@ def gradient_descent_ridge(X, y, lamb=1.0, eta0=0.1, T=500, schedule="constant",
             eta = learning_rate_cosine_annealing(eta0, t, T)
         w = gradient_step(X, y, w, lamb, eta)
 
-    return w.flatten()
+    return w.flatten(), L
 
 
 # # Remove the following line if you are not using it:
