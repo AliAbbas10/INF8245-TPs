@@ -40,28 +40,44 @@ print(f"Ordinary Least Squares: {rmse_ols}")
 print(f"Ridge Regression (λ=1.0): {rmse_ridge}")
 print(f"Weighted Ridge Regression: {rmse_weighted_ridge}")
 
-fig, axes = plt.subplots(1, 3, figsize=(15, 5))
+fig, axes = plt.subplots(1, 3, figsize=(20, 5))
 
-axes[0].scatter(Y_test, y_pred_ord_least_squares, alpha=0.5, color='blue')
+axes[0].scatter(Y_test, y_pred_ord_least_squares, alpha=0.5, color='green')
 axes[0].plot([Y_test.min(), Y_test.max()], [Y_test.min(), Y_test.max()], 'r', lw=1)
 axes[0].set_xlabel('Actual')
 axes[0].set_ylabel('Predicted')
 axes[0].set_title(f'Ordinary Least Squares\nRMSE: {rmse_ols}')
 axes[0].grid(True, alpha=0.2)
 
-axes[1].scatter(Y_test, y_pred_ridge, alpha=0.5, color='green')
+axes[1].scatter(Y_test, y_pred_ridge, alpha=0.5, color='blue')
 axes[1].plot([Y_test.min(), Y_test.max()], [Y_test.min(), Y_test.max()], 'r', lw=1)
 axes[1].set_xlabel('Actual')
 axes[1].set_ylabel('Predicted')
 axes[1].set_title(f'Ridge Regression (λ=1.0)\nRMSE: {rmse_ridge}')
 axes[1].grid(True, alpha=0.2)
 
-axes[2].scatter(Y_test, y_pred_weighted_ridge, alpha=0.5, color='orange')
+axes[2].scatter(Y_test, y_pred_weighted_ridge, alpha=0.5, color='purple')
 axes[2].plot([Y_test.min(), Y_test.max()], [Y_test.min(), Y_test.max()], 'r', lw=1)
 axes[2].set_xlabel('Actual')
 axes[2].set_ylabel('Predicted')
-axes[2].set_title(f'Weighted Ridge Regression\nRMSE: {rmse_weighted_ridge}')
+axes[2].set_title(f'Weighted Ridge Regression \n(λ={lambda_vec})\nRMSE: {rmse_weighted_ridge}')
 axes[2].grid(True, alpha=0.2)
 
 plt.tight_layout()
+plt.savefig("results/ridge_regression_results.png")
 plt.show()
+
+
+# the above results show a non-linear relationship (horizontal scatter plots) for all models
+# checking that there is indeed no linear relationship between features and target
+# fig, axes = plt.subplots(nrows=2, ncols=5, figsize=(25, 10))
+# axes = axes.flatten()
+# for i in range(X_train_arr.shape[1]):
+#     axes[i].scatter(X_train_arr[:, i], Y_train, alpha=0.5)
+#     axes[i].set_xlabel(f'Feature {i+1}')
+#     axes[i].set_ylabel('Target')
+#     axes[i].set_title(f'Scatter Plot of Feature {i+1} vs Target')
+#     axes[i].grid(True, alpha=0.2)
+
+# plt.tight_layout()
+# plt.show()
