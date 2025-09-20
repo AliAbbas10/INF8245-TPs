@@ -50,9 +50,9 @@ colors = ['blue', 'red', 'green']
 for i, schedule in enumerate(schedules):
     plt.plot(range(T), losses_results[schedule], color=colors[i], linewidth=2, label=f'{results[schedule]["name"]} (RMSE: {results[schedule]["rmse"]})')
 
-plt.title('Training Loss Comparison: Different Learning Rate Schedules')
+plt.title('Loss Comparison')
 plt.xlabel('Iteration')
-plt.ylabel('Training Loss')
+plt.ylabel('Loss')
 plt.legend()
 plt.grid(True, alpha=0.3)
 plt.tight_layout()

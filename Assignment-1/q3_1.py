@@ -40,6 +40,9 @@ def gradient_descent_ridge(X, y, lamb=1.0, eta0=0.1, T=500, schedule="constant",
     m = X.shape[1]
     w = np.zeros((m, 1))
     L = []
+
+    # (Error form gradescope autograder fix), y should be a column vector
+    y = y.reshape(-1, 1) if y.ndim == 1 or y.shape[1] != 1 else y
     
     for t in range(T):
         # (See report) for explanation of ridge regression loss = (1/n)||y - Xw||^2 + λ||w||^2
