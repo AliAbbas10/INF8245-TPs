@@ -47,10 +47,9 @@ def gradient_descent_ridge(X, y, lamb=1.0, eta0=0.1, T=500, schedule="constant",
     for t in range(T):
         # (See report section 3.1 for explanation of ridge regression loss = (1/n)||y - Xw||^2 + λ||w||^2)
         n = X.shape[0]
-        residuals = y - np.dot(X, w)
-        mse_loss = (1/n) * np.sum(residuals**2)
-        regularization = lamb * np.sum(w**2)
-        loss = mse_loss + regularization
+        error = y - np.dot(X, w)
+        mse_loss = (1/n) * np.sum(error**2)
+        loss = mse_loss + lamb * np.sum(w**2)
         L.append(loss)
         
         if schedule == "constant":
