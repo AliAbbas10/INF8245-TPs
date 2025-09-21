@@ -19,7 +19,6 @@ eta0 = 0.001
 k = 0.001
 T = 100
 lamb = 1.0
-
 schedules = ["constant", "exp_decay", "cosine"]
 
 results = {}
@@ -45,16 +44,16 @@ for schedule in schedules:
     print(f"{results[schedule]['name']}: {results[schedule]['rmse']}")
 
 # Losses comparison plot
-plt.figure(figsize=(10, 5))
+plt.figure(figsize=(10, 10))
 colors = ['blue', 'red', 'green']
 for i, schedule in enumerate(schedules):
-    plt.plot(range(T), losses_results[schedule], color=colors[i], linewidth=2, label=f'{results[schedule]["name"]} (RMSE: {results[schedule]["rmse"]})')
+    plt.plot(range(T), losses_results[schedule], color=colors[i], linewidth=1, label=f'{results[schedule]["name"]} (RMSE: {results[schedule]["rmse"]})')
 
 plt.title('Loss Comparison')
 plt.xlabel('Iteration')
 plt.ylabel('Loss')
 plt.legend()
-plt.grid(True, alpha=0.3)
+plt.grid(True, alpha=0.2)
 plt.tight_layout()
 plt.savefig('results/ridge_gradient_descent_loss_comparison.png')
 plt.show()

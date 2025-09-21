@@ -32,26 +32,3 @@ results.to_csv("results/cross_validation_results.csv")
 
 print("\nCross-Validation Results:")
 print(results)
-
-
-# print(f"\nBest Lambda Values")
-# print(f"MAE: {best_lambda_MAE}")
-# print(f"MaxError: {best_lambda_MaxError}")
-# print(f"RMSE: {best_lambda_RMSE}")
-
-# w_best_MAE = ridge_regression_optimize(X_train, Y_train, best_lambda_MAE)
-# y_pred_MAE = predict(X_test, w_best_MAE)
-# test_mae = MAE(Y_test, y_pred_MAE)
-# print(f"Test MAE (λ={best_lambda_MAE}): {test_mae}")
-
-# w_best_MaxError = ridge_regression_optimize(X_train, Y_train, best_lambda_MaxError)
-# y_pred_MaxError = predict(X_test, w_best_MaxError)
-# test_max_error = MaxError(Y_test, y_pred_MaxError)
-# test_rmse = rmse(Y_test, y_pred_MaxError)
-# print(f"Test MaxError (λ={best_lambda_MaxError}): {test_max_error}")
-
-
-# w_best_RMSE = ridge_regression_optimize(X_train, Y_train, best_lambda_RMSE)
-# y_pred_RMSE = predict(X_test, w_best_RMSE)
-# test_rmse = rmse(Y_test, y_pred_RMSE)
-# print(f"Test RMSE (λ={best_lambda_RMSE}): {test_rmse}")
