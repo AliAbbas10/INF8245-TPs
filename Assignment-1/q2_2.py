@@ -1,5 +1,4 @@
 from q2_1 import *
-from q1_1 import predict, rmse, ridge_regression_optimize
 import pandas as pd
 import numpy as np
 
