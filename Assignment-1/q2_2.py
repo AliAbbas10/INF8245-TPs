@@ -2,6 +2,9 @@ from q2_1 import *
 import pandas as pd
 import numpy as np
 
+# added a seed for reproducibility, testing purposes
+np.random.seed(15)
+
 # Write your code here ...
 # Not autograded — function names and structure are flexible.
 
@@ -31,3 +34,15 @@ results.to_csv("results/cross_validation_results.csv")
 
 print("\nCross-Validation Results:")
 print(results)
+
+print(f"\nMAE:")
+print(f"Best λ: {best_lambda_MAE}")
+print(f"Mean validation score: {mean_scores_MAE[best_lambda_MAE]}\n")
+
+print(f"Max Error")
+print(f"Best λ: {best_lambda_MaxError}")
+print(f"Mean validation score: {mean_scores_MaxError[best_lambda_MaxError]}\n")
+
+print(f"RMSE:")
+print(f"Best λ: {best_lambda_RMSE}")
+print(f"Mean validation score: {mean_scores_RMSE[best_lambda_RMSE]}")

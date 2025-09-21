@@ -45,7 +45,7 @@ def gradient_descent_ridge(X, y, lamb=1.0, eta0=0.1, T=500, schedule="constant",
     y = y.reshape(-1, 1) if y.ndim == 1 or y.shape[1] != 1 else y
     
     for t in range(T):
-        # (See report) for explanation of ridge regression loss = (1/n)||y - Xw||^2 + λ||w||^2
+        # (See report section 3.1 for explanation of ridge regression loss = (1/n)||y - Xw||^2 + λ||w||^2)
         n = X.shape[0]
         residuals = y - np.dot(X, w)
         mse_loss = (1/n) * np.sum(residuals**2)

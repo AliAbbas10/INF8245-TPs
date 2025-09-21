@@ -69,15 +69,46 @@ plt.show()
 
 
 # the above results show a non-linear relationship (horizontal scatter plots) for all models
-# checking that there is indeed no linear relationship between features and target
-# fig, axes = plt.subplots(nrows=2, ncols=5, figsize=(25, 10))
-# axes = axes.flatten()
-# for i in range(X_train_arr.shape[1]):
-#     axes[i].scatter(X_train_arr[:, i], Y_train, alpha=0.5)
-#     axes[i].set_xlabel(f'Feature {i+1}')
-#     axes[i].set_ylabel('Target')
-#     axes[i].set_title(f'Scatter Plot of Feature {i+1} vs Target')
-#     axes[i].grid(True, alpha=0.2)
+# checking the possibility there is no linear relationship between features and target
 
-# plt.tight_layout()
-# plt.show()
+# correlations between each feature and target as well as scatter plots
+correlations = []
+for i in range(X_train_arr.shape[1]):
+    corr = np.corrcoef(X_train_arr[:, i], Y_train.flatten())[0, 1]
+    correlations.append(corr)
+
+fig, axes = plt.subplots(nrows=2, ncols=5, figsize=(25, 10))
+axes = axes.flatten()
+for i in range(X_train_arr.shape[1]):
+    axes[i].scatter(X_train_arr[:, i], Y_train, alpha=0.5)
+    axes[i].set_xlabel(f'Feature {i+1}')
+    axes[i].set_ylabel('Target')
+    axes[i].set_title(f'Feature {i+1} vs Target\nCorrelation: {correlations[i]:.4f}')
+    axes[i].grid(True, alpha=0.2)
+
+plt.tight_layout()
+plt.savefig("results/feature_target_correlations.png")
+plt.show()
+
+# orrelation matrix
+data_with_target = np.column_stack([X_train_arr, Y_train.flatten()])
+feature_names = [f'Feature {i+1}' for i in range(X_train_arr.shape[1])] + ['Target']
+
+correlation_matrix = np.corrcoef(data_with_target.T)
+plt.figure(figsize=(12, 10))
+img = plt.imshow(correlation_matrix, cmap='RdBu_r', aspect='auto', vmin=-1, vmax=1)
+
+cbar = plt.colorbar(img)
+cbar.set_label('Correlation Coefficient', rotation=270, labelpad=15)
+
+plt.xticks(range(len(feature_names)), feature_names, rotation=45, ha='right')
+plt.yticks(range(len(feature_names)), feature_names)
+
+for i in range(len(feature_names)):
+    for j in range(len(feature_names)):
+        text = plt.text(j, i, f'{correlation_matrix[i, j]:.3f}',color="white")
+
+plt.title('Correlation Matrix Heatmap')
+plt.tight_layout()
+plt.savefig("results/correlation_heatmap.png")
+plt.show()
