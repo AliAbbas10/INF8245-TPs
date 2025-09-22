@@ -24,7 +24,7 @@ def learning_rate_exp_decay(eta0: float, t: int, k_decay: float) -> float:
 # Part (c)
 def learning_rate_cosine_annealing(eta0: float, t: int, T: int) -> float:
     # WRITE YOUR CODE HERE...
-    return eta0 * 1/2 * (1 + np.cos(np.pi * t / T))
+    return eta0 * 1/2 * (1 + np.cos(np.pi * t/T))
 
 
 # Part (d)
