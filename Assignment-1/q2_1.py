@@ -10,17 +10,17 @@ def cv_splitter(X, y, k):
     """
     # WRITE YOUR CODE HERE...
 
-    samples_size = X.shape[0]
-    indices = np.arange(samples_size)
+    data_size = X.shape[0]
+    indices = np.arange(data_size)
     np.random.shuffle(indices)
     X_shuffled = X[indices]
     y_shuffled = y[indices]
 
-    fold_split_size = samples_size // k
+    fold_split_size = data_size // k
     folds = []
     for i in range(k):
         test_start_index = i * fold_split_size
-        test_end_index = (i + 1) * fold_split_size if i != k - 1 else samples_size
+        test_end_index = (i + 1) * fold_split_size if i != k - 1 else data_size
 
         X_val_fold = X_shuffled[test_start_index:test_end_index]
         y_val_fold = y_shuffled[test_start_index:test_end_index]
