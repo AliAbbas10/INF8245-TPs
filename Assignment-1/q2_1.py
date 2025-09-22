@@ -69,7 +69,7 @@ def cross_validate_ridge(X, y, lambda_list, k, metric):
     elif metric == "RMSE":
         metric_op = rmse
 
-    avgs_dict = {}
+    mean_dict = {}
 
     for lamb in lambda_list:
         scores = []
@@ -77,10 +77,10 @@ def cross_validate_ridge(X, y, lambda_list, k, metric):
             w_ridge = ridge_regression_optimize(X_train, y_train, lamb)
             y_pred = np.dot(X_test, w_ridge)
             scores.append(metric_op(y_test, y_pred))
-        avgs_dict[lamb] = np.mean(scores)
+        mean_dict[lamb] = np.mean(scores)
 
-    best_lamb = min(avgs_dict, key=avgs_dict.get)
-    return best_lamb, avgs_dict
+    best_lambda = min(mean_dict, key = mean_dict.get)
+    return best_lambda, mean_dict
 
 
 
