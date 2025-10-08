@@ -6,7 +6,8 @@
 \usepackage{ragged2e}
 \usepackage{amsmath}
 \usepackage{amssymb}
-\usepackage{amsfonts} 
+\usepackage{amsfonts}
+\usepackage{mathtools} 
 
 \newcommand{\course}{INF8245 — Machine Learning}
 \newcommand{\assignment}{Assignment #2}
@@ -42,24 +43,25 @@
 \pagenumbering{arabic}
 
 \newpage
-\section{Theory: a special case of Stone's theorem}
+\section*{Theory: a special case of Stone's theorem}
 \label{sec:stone}
 
 \subsection*{Question 4}
 \begin{enumerate}
 \item[(a)]
+Show that for any classifier G, $R(G) = \mathbb{E}[\eta(X)1_{G(X)=0} + (1 - \eta(X))1_{G(X)=1}]$\\ where $\eta(x) = P(g = 1 | X = x)$.\\
 \begin{align}
 R(G) &= \mathbb{E}_{X, g \thicksim v}[1_{G(X) \neq g}]\nonumber\\
 R(G) &= \mathbb{E}[\mathbb{E}[1_{G(X)\neq g} | X]] \:\:\: \text{(Conditional Expectation)}\\\nonumber\\
 1_{G(X)\neq g} &= 1_{G(X)=0, g=1} + 1_{G(X)=1, g=0}\nonumber\\
 \mathbb{E}[1_{G(X)\neq g} | X = x] &= \mathbb{E}[1_{G(X)=0, g=1} + 1_{G(X)=1, g=0} | X = x]\nonumber\\
-&= \mathbb{P}[G(X)=0, g=1 | X = x] + \mathbb{P}[G(X)=1, g=0 | X = x]\nonumber\\
-&= \mathbb{P}[g = 1 | X = x]1_{G(X)=0} + \mathbb{P}[g = 0 | X = x]1_{G(X)=1}\nonumber\\
+&= P(G(X)=0, g=1 | X = x) + P(G(X)=1, g=0 | X = x)\nonumber\\
+&= P(g = 1 | X = x)1_{G(X)=0} + P(g = 0 | X = x)1_{G(X)=1}\nonumber\\
 &= \eta(x)1_{G(X)=0} + (1 - \eta(x))1_{G(X)=1}\nonumber\\\nonumber\\
 R(G) &= \mathbb{E}[\eta(X)1_{G(X)=0} + (1 - \eta(X))1_{G(X)=1}] \:\: \text{(using equation (1))}\nonumber\\\nonumber
 \end{align}
 
-\item[(b)]\leavevmode\\
+\item[(b)]
 % \begin{align*}
 Show that R^* := R(G^*) = \mathbb{E}[\min(\eta(X), 1 - \eta(X))]\\\\
 R^* &= \mathbb{E}[\min(\eta(X), 1 - \eta(X))]\\
@@ -83,11 +85,12 @@ Show that for any classifier G, $R(G) - R^* = \mathbb{E}[|2\eta(X) - 1|1_{G(X) \
 
 $1_{G(X)= 0} = 1 - 1_{G(X)= 1}$ and $1_{G^*(X)= 0} = 1 - 1_{G^*(X)= 1}$\\
 $1_{G(X)=0} - 1_{G^*(X)=0} = 1 - 1_{G(X)=1} - 1 + 1_{G^*(X)=1} = 1_{G^*(X)=1} - 1_{G(X)=1}$
-
 \begin{align*}
-R(G) - R^* &= \mathbb{E}[|2\eta(X) - 1|1_{G(X) \neq G^*(X)}]\nonumber\\
-&= \mathbb{E}[\eta(X)1_{G(X)=0} + (1 - \eta(X))1_{G(X)=1}] - \mathbb{E}[\eta(X)1_{G^*(X)=0} + (1 - \eta(X))1_{G^*(X)=1}]\\
-&= \mathbb{E}[\eta(X)1_{G(X)=0} - \eta(X)1_{G^*(X)=0} + (1 - \eta(X))1_{G(X)=1} - (1 - \eta(X))1_{G^*(X)=1}]\\
+R(G) - R^* &= \mathbb{E}[|2\eta(X) - 1|1_{G(X) \neq G^*(X)}]\nonumber\\\\
+&= \mathbb{E}[\eta(X)1_{G(X)=0} + (1 - \eta(X))1_{G(X)=1}]\\
+&- \mathbb{E}[\eta(X)1_{G^*(X)=0} + (1 - \eta(X))1_{G^*(X)=1}]\\\\
+&= \mathbb{E}[\eta(X)1_{G(X)=0} - \eta(X)1_{G^*(X)=0} + (1 - \eta(X))1_{G(X)=1}\\
+&- (1 - \eta(X))1_{G^*(X)=1}]\\\\
 &= \mathbb{E}[\eta(X)(1_{G(X)=0} - 1_{G^*(X)=0}) + (1 - \eta(X))(1_{G(X)=1} - 1_{G^*(X)=1})]\\
 &= \mathbb{E}[\eta(X)(1_{G^*(X)=1} - 1_{G(X)=1}) + (1 - \eta(X))(1_{G(X)=1} - 1_{G^*(X)=1})]\\
 &= \mathbb{E}[(2\eta(X) - 1)(1_{G^*(X)=1} - 1_{G(X)=1})]\\
@@ -105,7 +108,7 @@ if $G^*(X) = 0$ and $G(X) = 1$, then G^*(X)=0  \: and \: \eta < 1/2$\\
 since \eta(X) < 1/2, \: then \: $1 - 2\eta(X) = |2\eta(X) - 1|$\\\\
 Thus, in both cases, we have \\ $R(G) - R^* = \mathbb{E}[|2\eta(X) - 1|1_{G(X) \neq G^*(X)}]$\\
 % \noindent\rule{8cm}{0.4pt}\\\\
-\item[(c)]\leavevmode\\
+\item[(c)]
 Show that ${R}(\hat{G}_n) - R^* \leq 2\mathbb{E}[|\eta(X) - \hat{\eta}_n(X)|]$.
 \begin{align*}
 R(\hat{G}_{n}) - R^* &= \mathbb{E}[|2\eta(X) - 1|1_{\hat{G}_{n}(X) \neq G^*(X)}]\\
@@ -132,7 +135,49 @@ R(\hat{G}_n) - R^* &= 2\mathbb{E}[|\eta(X) - 1/2|1_{\hat{G}_n(X) \neq G^*(X)}]\\
 &\leq 2\mathbb{E}[|\eta(X) - \hat{\eta}_n(X)|]\\
 \end{align*}
 
+
+\end{enumerate}
 \subsection*{Question 5}
+\begin{enumerate}
+\item[(a)]
+Show that $\mathbb{E}[(\eta(x) - \hat{\eta}_n(X))^2] \leq 2\mathbb{E}[(\eta(x) - \tilde{\eta}_n(X))^2] + 2\mathbb{E}[(\tilde{\eta}_n(x) - \hat{\eta}_n(X))^2]$ 
+\begin{align*}
+	\eta(x) - \hat{\eta}_n(x) &= \eta(x) - \tilde{\eta}_n(X) + \tilde{\eta}_n(x) - \hat{\eta}_n(x)\\
+	 &= (\eta(x) - \tilde{\eta}_n(x)) + (\tilde{\eta}_n(x) - \hat{\eta}_n(x))\\
+	 (\eta(x) - \hat{\eta}_n(x))^2 &= (\eta(x) - \tilde{\eta}_n(x))^2 + (\tilde{\eta}_n(x) - \hat{\eta}_n(x))^2 \\
+	 &+ 2(\eta(x) - \tilde{\eta}_n(x))(\tilde{\eta}_n(x) - \hat{\eta}_n(x))\\
+\end{align*}
+(Using $2ab \leq a^2 + b^2$)
+\begin{align*}
+	 2(\eta(x) - \hat{\eta}_n(x))(\hat{\eta}_n(x) - \tilde{\eta}_n(x)) &\leq (\eta(x) - \tilde{\eta}_n(x))^2 + (\tilde{\eta}_n(x) - \hat{\eta}_n(x))^2 \\
+	 2(\mathbb{E}[(\eta(x) - \hat{\eta}_n(X))(\tilde{\eta}_n(X) - \hat{\eta}_n(X))]) &\leq \mathbb{E}[(\eta(x) - \tilde{\eta}_n(X))^2] + \mathbb{E}[(\tilde{\eta}_n(X) - \hat{\eta}_n(X))^2]\\
+	 \mathbb{E}[(\eta(x) - \hat{\eta}_n(X))^2] &\leq \mathbb{E}[(\eta(x) - \tilde{\eta}_n(X))^2] + \mathbb{E}[(\tilde{\eta}_n(X) - \hat{\eta}_n(X))^2]\\
+	 &+ \mathbb{E}[(\eta(x) - \tilde{\eta}_n(X))^2] + \mathbb{E}[(\tilde{\eta}_n(X) - \hat{\eta}_n(X))^2]\\
+	 &= 2\mathbb{E}[(\eta(x) - \tilde{\eta}_n(X))^2] + 2\mathbb{E}[(\tilde{\eta}_n(X) - \hat{\eta}_n(X))^2]\\
+	%  \shortintertext{Using 2ab \leq a^2 + b^2}\\
+	\end{align*}
+\item[(b)] Show that $\mathbb{E}[(\eta(X) - \tilde{\eta}_n(X))^2] \leq \varepsilon^2 + \mathbb{E}\left[\sum_{i=1}^{n} w_{n,i}(X)1_{\|X_i - X\| \geq \delta}\right]$.
+
+\begin{align*}
+\eta(X) - \tilde{\eta}_n(X) &= \eta(X) - \sum_{i=1}^n w_{n,i}(X) \eta(X_i)\\
+&= \sum_{i=1}^n w_{n,i}(X) \eta(X) - \sum_{i=1}^n w_{n,i}(X) \eta(X_i)\\
+&= \sum_{i=1}^n w_{n,i}(X)(\eta(X) - \eta(X_i))
+\end{align*}
+
+Since $\sum_{i=1}^n w_{n,i}(X) = 1$, Jensen's inequality gives:
+
+\begin{align*}
+(\eta(X) - \tilde{\eta}_n(X))^2 &= \Big(\sum_{i=1}^n w_{n,i}(X)(\eta(X) - \eta(X_i))\Big)^2\\
+&\leq \sum_{i=1}^n w_{n,i}(X)(\eta(X) - \eta(X_i))^2\\
+\mathbb{E}[(\eta(X) - \tilde{\eta}_n(X))^2] &\leq \mathbb{E}[\sum_{i=1}^n w_{n,i}(X)(\eta(X) - \eta(X_i))^2]
+\\
+\mathbb{E}[(\eta(X) - \tilde{\eta}_n(X))^2] &\leq \mathbb{E}[\sum_{i=1}^n w_{n,i}(X)(\eta(X) - \eta(X_i))^2 1_{\|X_i - X\| < \delta}]\\
+&\quad + \mathbb{E}[\sum_{i=1}^n w_{n,i}(X)(\eta(X) - \eta(X_i))^2 1_{\|X_i - X\| \geq \delta}]
+\end{align*}
+
+$(\varepsilon, \delta)$-definition of limit: If $\eta$ is continuous, then for every $\varepsilon > 0$, there exists $\delta > 0$ such that for all $p \in \mathbb{R}^d$:
+
+$\|x - p\| < \delta \Rightarrow |\eta(x) - \eta(p)| < \epsilon$\\
 
 \end{enumerate}
 
