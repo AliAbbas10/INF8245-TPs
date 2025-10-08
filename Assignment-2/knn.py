@@ -25,6 +25,7 @@ def euclidean_distance(A: np.ndarray, B: np.ndarray) -> np.ndarray:
     ### Implement here
     # You might want to use a metric in sklearn.metrics.pairwise to avoid potential out-of-memory errors.
     # And to speed up the computation.
+    distances = smp.euclidean_distances(A, B)
 
     return distances
 
@@ -46,6 +47,7 @@ def cosine_distance(A: np.ndarray, B: np.ndarray) -> np.ndarray:
     distances = None
 
     ### Implement here
+    distances = smp.cosine_distances(A, B)
 
     return distances
 
@@ -78,6 +80,11 @@ def get_k_nearest_neighbors(distances: np.ndarray, labels: np.ndarray, k: int) -
     ### Implement here, explain also briefly in a comment how you are doing it.
     ### If you use any external function, such as numpy's functions, please explain what the function does.
 
+
+    # No loop but does argpartition use loops under the hood?
+    k_nearest_indices = np.argpartition(distances, k-1, axis=0)[:k]
+    neighbors = labels[k_nearest_indices]
+
     return neighbors
 
 
@@ -94,6 +101,10 @@ def majority_voting(nearest_labels: np.ndarray) -> np.ndarray:
     predicted = None
 
     ### Implement here
+    predicted = np.zeros(nearest_labels.shape[1])
+    for i in range(nearest_labels.shape[1]):
+        counts = np.bincount(nearest_labels[:, i])
+        predicted[i] = np.argmax(counts)
 
     return predicted
 
@@ -141,7 +152,9 @@ if __name__ == "__main__":
     )
 
     # define the training set and labels
-    X_val, y_val = None, None
+    X_val, y_val = X_train[-10000:], y_train[-10000:]
+    X_train = X_train[:-10000]
+    y_train = y_train[:-10000]
 
     print("Training set shape: ", X_train.shape)
     print("Validation set shape: ", X_val.shape)
@@ -149,16 +162,23 @@ if __name__ == "__main__":
     # dictionary to store the k values as keys and the validation accuracies as the values
     val_accuracy_per_k = {}
 
-    for k in [1]:
+    for k in [1, 2, 3, 4, 5, 10, 20]:
         print(f"Calculating validation accuracy for k={k}")
-        val_accuracy_per_k[k] = None  # TODO complete that line
+        val_accuracy_per_k[k] = knn_classifier(X_train, y_train, X_val, y_val, k, euclidean_distance)
         print(f"Validation accuracy of {val_accuracy_per_k[k]} % for k={k}")
 
-    best_k = None
+    best_k = max(val_accuracy_per_k, key=val_accuracy_per_k.get)
     print(f"Best validation accuracy of {val_accuracy_per_k[best_k]} % for k={best_k}")
 
+    test_accuracy_per_k = {}
     print("Running on the test set...")
-    test_accuracy = None  # TODO complete that line
-    print(test_accuracy)
+    for k in [1, 2, 3, 4, 5, 10, 20]:
+        print(f"Calculating test accuracy for k={k}")
+        test_accuracy_per_k[k] = knn_classifier(X_train, y_train, X_test, y_test, k, euclidean_distance)
+        print(f"Test accuracy of {test_accuracy_per_k[k]} % for k={k}")
+
+    best_k_test = max(test_accuracy_per_k, key=test_accuracy_per_k.get)
+    print(f"Best test accuracy of {test_accuracy_per_k[best_k_test]} % for k={best_k_test}")
+
 
     # Do the same for cosine distance

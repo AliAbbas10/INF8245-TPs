@@ -1,0 +1,8 @@
+{
+  // LaTeX Workshop Settings - Auto-build DISABLED
+  "latex-workshop.latex.autoBuild.run": "never",
+  "latex-workshop.latex.autoClean.run": "never",
+  "latex-workshop.view.pdf.viewer": "tab",
+  "latex-workshop.message.error.show": true,
+  "latex-workshop.message.warning.show": false
+}

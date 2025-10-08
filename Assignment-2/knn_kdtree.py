@@ -45,7 +45,16 @@ class KDTree:
             return None
 
         # TODO : Implement the k-d tree building logic
-        return None
+
+        axis = depth % self.dims
+        sorted_indices = np.argsort(X_train[:, axis])
+        X_sorted = X_train[sorted_indices]
+        y_sorted = y_train[sorted_indices]
+        median = len(X_sorted) // 2
+        root = KDNode(data=X_sorted[median], label=y_sorted[median], dim=axis)
+        root.left = self._build_tree(X_sorted[:median], y_sorted[:median], depth + 1)
+        root.right = self._build_tree(X_sorted[median + 1:], y_sorted[median + 1:], depth + 1)
+        return root
 
     def _find_nearest(self, node, query_point, best_guess=None, best_dist=np.inf):
         """
@@ -63,6 +72,35 @@ class KDTree:
             return best_guess, best_dist
 
         # TODO: Implement the nearest neighbor search logic
+        point = node.data
+        label = node.label
+        distance = np.linalg.norm(point - query_point)
+        if distance < best_dist:
+            best_dist = distance
+            best_guess = label
+        axis = node.dim
+        difference = query_point[axis] - point[axis]
+
+        if distance == 0:
+            return node.label, 0
+    
+        if distance < best_dist:
+            best_dist = distance
+            best_guess = node.label
+
+        axis = node.dim
+        difference = query_point[axis] - point[axis]
+        
+        if difference <= 0:
+            first_child_to_search, second_child = node.left, node.right
+        else:
+            first_child_to_search, second_child = node.right, node.left
+
+        best_guess, best_dist = self._find_nearest(first_child_to_search, query_point, best_guess, best_dist)
+
+        if abs(difference) < best_dist:
+            best_guess, best_dist = self._find_nearest(second_child, query_point, best_guess, best_dist)
+
         return best_guess, best_dist
 
     def find_nearest_neighbor(self, query_point):
@@ -84,6 +122,10 @@ def kdtree_1nn_classifier(X_train, y_train, X_test):
         predictions: The predicted labels for the test set. np.ndarray of shape (num_test_samples,)
     """
     predictions = []
+    tree = KDTree(X_train, y_train)
+    for query_point in X_test:
+        pred_label = tree.find_nearest_neighbor(query_point)
+        predictions.append(pred_label)
     return np.array(predictions)
 
 
@@ -94,7 +136,7 @@ if __name__ == "__main__":
     # Load and preprocess the MNIST dataset
     # X_train, y_train, X_test, y_test, mean, std = preprocess_mnist_data("data/MNIST/train.csv", "data/MNIST/t10k.csv")
     X_train, y_train, X_test, y_test, mean, std = preprocess_credit_card(
-        "data/credit_card_fraud/credit_card_fraud_train.csv", "data/credit_card_fraud/credit_card_fraud_test.csv"
+        "Assignment-2/data/credit_card_fraud/credit_card_fraud_train.csv", "Assignment-2/data/credit_card_fraud/credit_card_fraud_test.csv"
     )
     print("Data loaded and preprocessed.")
     print("Training set shape:", X_train.shape)

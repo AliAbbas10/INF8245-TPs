@@ -1,0 +1,88 @@
+\documentclass[12pt]{article}
+\usepackage[a4paper,margin=1in]{geometry}
+\usepackage{graphicx}
+\usepackage{setspace}
+\usepackage{titling}
+\usepackage{ragged2e}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsfonts} 
+
+\newcommand{\course}{INF8245 — Machine Learning}
+\newcommand{\assignment}{Assignment #2}
+\newcommand{\university}{Polytechnique Montréal}
+
+\begin{document}
+
+\begin{titlepage}
+    \centering
+    \vspace*{1.5cm}
+
+    {\LARGE\scshape \university \par}
+    \vspace{1.5cm}
+
+    {\Huge\bfseries \course \par}
+    \vspace{1cm}
+
+    {\Large\bfseries \assignment \par}
+    \vspace{1.5cm}
+
+    {\Huge\bfseries \titletext \par}
+    \vspace{2cm}
+
+    {\Large Ali Abbas \textemdash\ Student ID: 2078188 \par}
+    \vspace{2cm}
+
+    {\large \supervisor \par}
+    \vfill
+
+\end{titlepage}
+
+\cleardoublepage
+\pagenumbering{arabic}
+
+\newpage
+\section{Theory: a special case of Stone's theorem}
+\label{sec:stone}
+
+\subsection*{Question 4}
+\begin{enumerate}
+\item[(a)]
+\begin{align}
+R(G) &= \mathbb{E}_{X, g \thicksim v}[1_{G(X) \neq g}]\nonumber\\
+R(G) &= \mathbb{E}[\mathbb{E}[1_{G(X)\neq g} | X]] \:\:\: \text{(Conditional Expectation)}\\\nonumber\\
+1_{G(X)\neq g} &= 1_{G(X)=0, g=1} + 1_{G(X)=1, g=0}\nonumber\\
+\mathbb{E}[1_{G(X)\neq g} | X = x] &= \mathbb{E}[1_{G(X)=0, g=1} + 1_{G(X)=1, g=0} | X = x]\nonumber\\
+&= \mathbb{P}[G(X)=0, g=1 | X = x] + \mathbb{P}[G(X)=1, g=0 | X = x]\nonumber\\
+&= \mathbb{P}[g = 1 | X = x]1_{G(X)=0} + \mathbb{P}[g = 0 | X = x]1_{G(X)=1}\nonumber\\
+&= \eta(x)1_{G(X)=0} + (1 - \eta(x))1_{G(X)=1}\nonumber\\\nonumber\\
+R(G) &= \mathbb{E}[\eta(X)1_{G(X)=0} + (1 - \eta(X))1_{G(X)=1}] \:\:\: \text{using equation (1)}\nonumber\\\nonumber
+\end{align}
+
+\item[(b)]\leavevmode\\
+% \begin{align*}
+Show that R^* := R(G^*) = \mathbb{E}[\min(\eta(X), 1 - \eta(X))]\\\\
+R^* &= \mathbb{E}[\min(\eta(X), 1 - \eta(X))]\\
+R^* &= \mathbb{E}[\eta(X)1_{G^*(X) = 0} + (1 - \eta(X))1_{G^*(X) = 1}]\\\\
+% \end{align*}
+G^*(X) = \begin{cases}
+0 & \text{if } \eta(X) < 1/2\\
+1 & \text{if } \eta(X) \geq 1/2
+\end{cases}$\\
+
+
+Suppose $\eta(X)\ge \tfrac12$, then $\eta(X)\, \mathbf{1}_{G^*(X)=0}=0$\\
+and $(1-\eta(X))\, \mathbf{1}_{G^*(X)=1}=1-\eta(X)\le \eta(X)$\\
+So, $\min(\eta(X), 1 - \eta(X)) = (1 - \eta(X)) \: and \: R^* = \mathbb{E}[(1 - \eta(X))]$\\\\
+Suppose $\eta(X)< \tfrac12$, then $\eta(X)\, \mathbf{1}_{G^*(X)=0}=\eta(X) < 1 - \eta(X)$\\
+and $(1-\eta(X))\, \mathbf{1}_{G^*(X)=1}=0$\\
+So, $\min(\eta(X), 1 - \eta(X)) = \eta(X) \: and \: R^* = \mathbb{E}[\eta(X)]$\\\\
+Thus, in both cases, we have \\ $R^* = \mathbb{E}[\min(\eta(X), 1 - \eta(X))]$\\
+\noindent\rule{8cm}{0.4pt}\\\\
+Show that for any classifier G, $R(G) - R^* = \mathbb{E}[|2\eta(X) - 1|1_{G(X) \neq G^*(X)}]$\\\\
+
+\item[(c)]
+
+\end{enumerate}
+
+\end{document}
