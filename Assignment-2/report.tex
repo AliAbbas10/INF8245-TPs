@@ -56,7 +56,7 @@ R(G) &= \mathbb{E}[\mathbb{E}[1_{G(X)\neq g} | X]] \:\:\: \text{(Conditional Exp
 &= \mathbb{P}[G(X)=0, g=1 | X = x] + \mathbb{P}[G(X)=1, g=0 | X = x]\nonumber\\
 &= \mathbb{P}[g = 1 | X = x]1_{G(X)=0} + \mathbb{P}[g = 0 | X = x]1_{G(X)=1}\nonumber\\
 &= \eta(x)1_{G(X)=0} + (1 - \eta(x))1_{G(X)=1}\nonumber\\\nonumber\\
-R(G) &= \mathbb{E}[\eta(X)1_{G(X)=0} + (1 - \eta(X))1_{G(X)=1}] \:\:\: \text{using equation (1)}\nonumber\\\nonumber
+R(G) &= \mathbb{E}[\eta(X)1_{G(X)=0} + (1 - \eta(X))1_{G(X)=1}] \:\: \text{(using equation (1))}\nonumber\\\nonumber
 \end{align}
 
 \item[(b)]\leavevmode\\
@@ -67,7 +67,7 @@ R^* &= \mathbb{E}[\eta(X)1_{G^*(X) = 0} + (1 - \eta(X))1_{G^*(X) = 1}]\\\\
 % \end{align*}
 G^*(X) = \begin{cases}
 0 & \text{if } \eta(X) < 1/2\\
-1 & \text{if } \eta(X) \geq 1/2
+1 & \text{elsewhere} 
 \end{cases}$\\
 
 
@@ -79,9 +79,60 @@ and $(1-\eta(X))\, \mathbf{1}_{G^*(X)=1}=0$\\
 So, $\min(\eta(X), 1 - \eta(X)) = \eta(X) \: and \: R^* = \mathbb{E}[\eta(X)]$\\\\
 Thus, in both cases, we have \\ $R^* = \mathbb{E}[\min(\eta(X), 1 - \eta(X))]$\\
 \noindent\rule{8cm}{0.4pt}\\\\
-Show that for any classifier G, $R(G) - R^* = \mathbb{E}[|2\eta(X) - 1|1_{G(X) \neq G^*(X)}]$\\\\
+Show that for any classifier G, $R(G) - R^* = \mathbb{E}[|2\eta(X) - 1|1_{G(X) \neq G^*(X)}]$\\
 
-\item[(c)]
+$1_{G(X)= 0} = 1 - 1_{G(X)= 1}$ and $1_{G^*(X)= 0} = 1 - 1_{G^*(X)= 1}$\\
+$1_{G(X)=0} - 1_{G^*(X)=0} = 1 - 1_{G(X)=1} - 1 + 1_{G^*(X)=1} = 1_{G^*(X)=1} - 1_{G(X)=1}$
+
+\begin{align*}
+R(G) - R^* &= \mathbb{E}[|2\eta(X) - 1|1_{G(X) \neq G^*(X)}]\nonumber\\
+&= \mathbb{E}[\eta(X)1_{G(X)=0} + (1 - \eta(X))1_{G(X)=1}] - \mathbb{E}[\eta(X)1_{G^*(X)=0} + (1 - \eta(X))1_{G^*(X)=1}]\\
+&= \mathbb{E}[\eta(X)1_{G(X)=0} - \eta(X)1_{G^*(X)=0} + (1 - \eta(X))1_{G(X)=1} - (1 - \eta(X))1_{G^*(X)=1}]\\
+&= \mathbb{E}[\eta(X)(1_{G(X)=0} - 1_{G^*(X)=0}) + (1 - \eta(X))(1_{G(X)=1} - 1_{G^*(X)=1})]\\
+&= \mathbb{E}[\eta(X)(1_{G^*(X)=1} - 1_{G(X)=1}) + (1 - \eta(X))(1_{G(X)=1} - 1_{G^*(X)=1})]\\
+&= \mathbb{E}[(2\eta(X) - 1)(1_{G^*(X)=1} - 1_{G(X)=1})]\\
+\end{align*}
+
+Case 1: suppose $1_{G^*(X) \neq G(X)} = 0$, then $1_{G^*(X)} = 1_{G(X)}$; $1_{G^*(X)} - 1_{G(X)} = 0$\\\\
+Case 2: suppose $1_{G^*(X) \neq G(X)} = 1$\\
+if $G^*(X) = 1$ and $G(X) = 0$, then G^*(X)=1  \: and \: \eta \geq 1/2$\\
+\hookrightarrow 2\eta(X) -1 \geq 0$\\
+\hookrightarrow (2\eta(X) - 1 )(1-0) = 2\eta(X) - 1$\\
+since \eta(X) \geq 1/2, \: then \: $2\eta(X) - 1 = |2\eta(X) - 1|$\\\\
+if $G^*(X) = 0$ and $G(X) = 1$, then G^*(X)=0  \: and \: \eta < 1/2$\\
+\hookrightarrow 2\eta(X) -1 < 0$\\
+\hookrightarrow (2\eta(X) - 1 )(0-1) = -(2\eta(X) - 1) = 1 - 2\eta(X)$\\
+since \eta(X) < 1/2, \: then \: $1 - 2\eta(X) = |2\eta(X) - 1|$\\\\
+Thus, in both cases, we have \\ $R(G) - R^* = \mathbb{E}[|2\eta(X) - 1|1_{G(X) \neq G^*(X)}]$\\
+% \noindent\rule{8cm}{0.4pt}\\\\
+\item[(c)]\leavevmode\\
+Show that ${R}(\hat{G}_n) - R^* \leq 2\mathbb{E}[|\eta(X) - \hat{\eta}_n(X)|]$.
+\begin{align*}
+R(\hat{G}_{n}) - R^* &= \mathbb{E}[|2\eta(X) - 1|1_{\hat{G}_{n}(X) \neq G^*(X)}]\\
+&= 2\mathbb{E}[|\eta(X) - 1/2|1_{\hat{G}_{n}(X) \neq G^*(X)}]\\
+	\end{align*}
+G^*(X) = \begin{cases}
+1 & \text{if } \eta(X) \geq 1/2\\
+0 & \text{elsewhere}
+\end{cases}$\\
+
+$\hat{G}_{n}(X)$ = \begin{cases}
+1 & \text{if } \hat{\eta}_n(X) \geq 1/2\\
+0 & \text{elsewhere}
+\end{cases}$\\
+
+Case 1: suppose G^*(X) = 1 \: and \: \hat{G}_n(X) = 0$, then $\eta(X) \geq 1/2$ and $\hat{\eta}_n(X) < 1/2$\\
+$\hookrightarrow \hat{\eta}_n(X) < 1/2 \leq \eta(X) \rightarrow |\eta(X) - \hat{\eta}_n(X)| \geq |\eta(X) - 1/2|$\\\\
+Case 2: suppose \: G^*(X) = 0 \: and \: \hat{G}_n(X) = 1$, then $\eta(X) < 1/2$ and $\hat{\eta}_n(X) \geq 1/2$\\
+\hookrightarrow \eta(X) < 1/2 \leq \hat{\eta}_n(X) \rightarrow |\eta(X) - \hat{\eta}_n(X)| \geq |\eta(X) - 1/2|$\\\\
+\text{Thus, in both cases, we have} $|\eta(X) - \hat{\eta}_n(X)| \geq |\eta(X) - 1/2|$
+\begin{align*}
+R(\hat{G}_n) - R^* &= 2\mathbb{E}[|\eta(X) - 1/2|1_{\hat{G}_n(X) \neq G^*(X)}]\\
+&\leq 2\mathbb{E}[|\eta(X) - \hat{\eta}_n(X)|1_{\hat{G}_n(X) \neq G^*(X)}]\\
+&\leq 2\mathbb{E}[|\eta(X) - \hat{\eta}_n(X)|]\\
+\end{align*}
+
+\subsection*{Question 5}
 
 \end{enumerate}
 
