@@ -79,7 +79,7 @@ So, $\min(\eta(X), 1 - \eta(X)) = (1 - \eta(X)) \: and \: R^* = \mathbb{E}[(1 - 
 Suppose $\eta(X)< \tfrac12$, then $\eta(X)\, \mathbf{1}_{G^*(X)=0}=\eta(X) < 1 - \eta(X)$\\
 and $(1-\eta(X))\, \mathbf{1}_{G^*(X)=1}=0$\\
 So, $\min(\eta(X), 1 - \eta(X)) = \eta(X) \: and \: R^* = \mathbb{E}[\eta(X)]$\\\\
-Thus, in both cases, we have \\ $R^* = \mathbb{E}[\min(\eta(X), 1 - \eta(X))]$\\
+Thus, in both cases, we have : \\ $R^* = \mathbb{E}[\min(\eta(X), 1 - \eta(X))]$\\
 \noindent\rule{8cm}{0.4pt}\\\\
 Show that for any classifier G, $R(G) - R^* = \mathbb{E}[|2\eta(X) - 1|1_{G(X) \neq G^*(X)}]$\\
 
@@ -88,9 +88,9 @@ $1_{G(X)=0} - 1_{G^*(X)=0} = 1 - 1_{G(X)=1} - 1 + 1_{G^*(X)=1} = 1_{G^*(X)=1} - 
 \begin{align*}
 R(G) - R^* &= \mathbb{E}[|2\eta(X) - 1|1_{G(X) \neq G^*(X)}]\nonumber\\\\
 &= \mathbb{E}[\eta(X)1_{G(X)=0} + (1 - \eta(X))1_{G(X)=1}]\\
-&- \mathbb{E}[\eta(X)1_{G^*(X)=0} + (1 - \eta(X))1_{G^*(X)=1}]\\\\
+&\quad- \mathbb{E}[\eta(X)1_{G^*(X)=0} + (1 - \eta(X))1_{G^*(X)=1}]\\\\
 &= \mathbb{E}[\eta(X)1_{G(X)=0} - \eta(X)1_{G^*(X)=0} + (1 - \eta(X))1_{G(X)=1}\\
-&- (1 - \eta(X))1_{G^*(X)=1}]\\\\
+&\quad- (1 - \eta(X))1_{G^*(X)=1}]\\\\
 &= \mathbb{E}[\eta(X)(1_{G(X)=0} - 1_{G^*(X)=0}) + (1 - \eta(X))(1_{G(X)=1} - 1_{G^*(X)=1})]\\
 &= \mathbb{E}[\eta(X)(1_{G^*(X)=1} - 1_{G(X)=1}) + (1 - \eta(X))(1_{G(X)=1} - 1_{G^*(X)=1})]\\
 &= \mathbb{E}[(2\eta(X) - 1)(1_{G^*(X)=1} - 1_{G(X)=1})]\\
@@ -106,7 +106,7 @@ if $G^*(X) = 0$ and $G(X) = 1$, then G^*(X)=0  \: and \: \eta < 1/2$\\
 \hookrightarrow 2\eta(X) -1 < 0$\\
 \hookrightarrow (2\eta(X) - 1 )(0-1) = -(2\eta(X) - 1) = 1 - 2\eta(X)$\\
 since \eta(X) < 1/2, \: then \: $1 - 2\eta(X) = |2\eta(X) - 1|$\\\\
-Thus, in both cases, we have \\ $R(G) - R^* = \mathbb{E}[|2\eta(X) - 1|1_{G(X) \neq G^*(X)}]$\\
+Thus, in both cases, we have : \\ $R(G) - R^* = \mathbb{E}[|2\eta(X) - 1|1_{G(X) \neq G^*(X)}]$\\
 % \noindent\rule{8cm}{0.4pt}\\\\
 \item[(c)]
 Show that ${R}(\hat{G}_n) - R^* \leq 2\mathbb{E}[|\eta(X) - \hat{\eta}_n(X)|]$.
@@ -128,7 +128,7 @@ Case 1: suppose G^*(X) = 1 \: and \: \hat{G}_n(X) = 0$, then $\eta(X) \geq 1/2$ 
 $\hookrightarrow \hat{\eta}_n(X) < 1/2 \leq \eta(X) \rightarrow |\eta(X) - \hat{\eta}_n(X)| \geq |\eta(X) - 1/2|$\\\\
 Case 2: suppose \: G^*(X) = 0 \: and \: \hat{G}_n(X) = 1$, then $\eta(X) < 1/2$ and $\hat{\eta}_n(X) \geq 1/2$\\
 \hookrightarrow \eta(X) < 1/2 \leq \hat{\eta}_n(X) \rightarrow |\eta(X) - \hat{\eta}_n(X)| \geq |\eta(X) - 1/2|$\\\\
-\text{Thus, in both cases, we have} $|\eta(X) - \hat{\eta}_n(X)| \geq |\eta(X) - 1/2|$
+\text{Thus, in both cases, we have :} $|\eta(X) - \hat{\eta}_n(X)| \geq |\eta(X) - 1/2|$
 \begin{align*}
 R(\hat{G}_n) - R^* &= 2\mathbb{E}[|\eta(X) - 1/2|1_{\hat{G}_n(X) \neq G^*(X)}]\\
 &\leq 2\mathbb{E}[|\eta(X) - \hat{\eta}_n(X)|1_{\hat{G}_n(X) \neq G^*(X)}]\\
@@ -145,14 +145,14 @@ Show that $\mathbb{E}[(\eta(x) - \hat{\eta}_n(X))^2] \leq 2\mathbb{E}[(\eta(x) -
 	\eta(x) - \hat{\eta}_n(x) &= \eta(x) - \tilde{\eta}_n(X) + \tilde{\eta}_n(x) - \hat{\eta}_n(x)\\
 	 &= (\eta(x) - \tilde{\eta}_n(x)) + (\tilde{\eta}_n(x) - \hat{\eta}_n(x))\\
 	 (\eta(x) - \hat{\eta}_n(x))^2 &= (\eta(x) - \tilde{\eta}_n(x))^2 + (\tilde{\eta}_n(x) - \hat{\eta}_n(x))^2 \\
-	 &+ 2(\eta(x) - \tilde{\eta}_n(x))(\tilde{\eta}_n(x) - \hat{\eta}_n(x))\\
+	 &\quad + 2(\eta(x) - \tilde{\eta}_n(x))(\tilde{\eta}_n(x) - \hat{\eta}_n(x))\\
 \end{align*}
 (Using $2ab \leq a^2 + b^2$)
 \begin{align*}
 	 2(\eta(x) - \hat{\eta}_n(x))(\hat{\eta}_n(x) - \tilde{\eta}_n(x)) &\leq (\eta(x) - \tilde{\eta}_n(x))^2 + (\tilde{\eta}_n(x) - \hat{\eta}_n(x))^2 \\
 	 2(\mathbb{E}[(\eta(x) - \hat{\eta}_n(X))(\tilde{\eta}_n(X) - \hat{\eta}_n(X))]) &\leq \mathbb{E}[(\eta(x) - \tilde{\eta}_n(X))^2] + \mathbb{E}[(\tilde{\eta}_n(X) - \hat{\eta}_n(X))^2]\\
 	 \mathbb{E}[(\eta(x) - \hat{\eta}_n(X))^2] &\leq \mathbb{E}[(\eta(x) - \tilde{\eta}_n(X))^2] + \mathbb{E}[(\tilde{\eta}_n(X) - \hat{\eta}_n(X))^2]\\
-	 &+ \mathbb{E}[(\eta(x) - \tilde{\eta}_n(X))^2] + \mathbb{E}[(\tilde{\eta}_n(X) - \hat{\eta}_n(X))^2]\\
+	 &\quad+ \mathbb{E}[(\eta(x) - \tilde{\eta}_n(X))^2] + \mathbb{E}[(\tilde{\eta}_n(X) - \hat{\eta}_n(X))^2]\\
 	 &= 2\mathbb{E}[(\eta(x) - \tilde{\eta}_n(X))^2] + 2\mathbb{E}[(\tilde{\eta}_n(X) - \hat{\eta}_n(X))^2]\\
 	%  \shortintertext{Using 2ab \leq a^2 + b^2}\\
 	\end{align*}
@@ -164,7 +164,7 @@ Show that $\mathbb{E}[(\eta(x) - \hat{\eta}_n(X))^2] \leq 2\mathbb{E}[(\eta(x) -
 &= \sum_{i=1}^n w_{n,i}(X)(\eta(X) - \eta(X_i))
 \end{align*}
 
-Since $\sum_{i=1}^n w_{n,i}(X) = 1$, Jensen's inequality gives:
+Since $\sum_{i=1}^n w_{n,i}(X) = 1$, Jensen's inequality:
 
 \begin{align*}
 (\eta(X) - \tilde{\eta}_n(X))^2 &= \Big(\sum_{i=1}^n w_{n,i}(X)(\eta(X) - \eta(X_i))\Big)^2\\
@@ -175,9 +175,7 @@ Since $\sum_{i=1}^n w_{n,i}(X) = 1$, Jensen's inequality gives:
 &\quad + \mathbb{E}[\sum_{i=1}^n w_{n,i}(X)(\eta(X) - \eta(X_i))^2 1_{\|X_i - X\| \geq \delta}]
 \end{align*}
 
-$(\varepsilon, \delta)$-definition of limit: If $\eta$ is continuous, then for every $\varepsilon > 0$, there exists $\delta > 0$ such that for all $p \in \mathbb{R}^d$:
-
-$\|x - p\| < \delta \Rightarrow |\eta(x) - \eta(p)| < \epsilon$\\
+$(\varepsilon, \delta)$-definition of limit: If $\eta$ is continuous, then for every $\varepsilon > 0$, there exists $\delta > 0$ such that for all $p: $\|x - p\| < \delta \Rightarrow |\eta(x) - \eta(p)| < \epsilon$\\
 
 \end{enumerate}
 
