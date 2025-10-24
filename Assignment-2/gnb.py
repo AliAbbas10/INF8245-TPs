@@ -14,6 +14,22 @@ def gnb_fit_classifier(X: np.ndarray, Y: np.ndarray, smoothing: float = 1e-3) ->
     means = []
     vars_ = []
     # Your implementation here
+    classes = np.unique(Y)
+    for k in classes:
+        X_k = X[Y == k]
+        
+        # P(g=k)
+        prior_k = len(X_k) / len(X)
+        prior_probs.append(prior_k)
+        
+        #uk = E[X|g=k]
+        mean_k = np.mean(X_k, axis=0)
+        means.append(mean_k)
+        
+        # Class conditional variance
+        var_k = np.var(X_k, axis=0) + smoothing
+        vars_.append(var_k)
+
     return prior_probs, means, vars_
 
 
@@ -27,9 +43,27 @@ def gnb_predict(
     """
     Computes predictions from the GNB classifier
     """
-    log_probs = None
-    preds = None
-    # Your implementation here
+    num_samples = X.shape[0]
+    log_posteriors = np.zeros((num_samples, num_classes))
+    
+    for k in range(num_classes):
+        log_prior_k = np.log(prior_probs[k])
+    
+        
+        mean_k = means[k]
+        var_k = vars_[k]
+        
+        diff_squared = (X - mean_k) ** 2
+        normalized_diff = diff_squared / var_k
+        
+        # Log likelihood
+        log_det_term = np.sum(np.log(var_k)) 
+        quadratic_term = np.sum(normalized_diff, axis=1)
+        log_likelihood_k = -0.5 * (log_det_term + quadratic_term)
+        
+        log_posteriors[:, k] = log_likelihood_k + log_prior_k
+    
+    preds = np.argmax(log_posteriors, axis=1)
     return preds
 
 

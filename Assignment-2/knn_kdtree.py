@@ -73,20 +73,19 @@ class KDTree:
 
         # TODO: Implement the nearest neighbor search logic
         point = node.data
-        label = node.label
         distance = np.linalg.norm(point - query_point)
         if distance < best_dist:
             best_dist = distance
-            best_guess = label
+            best_guess = node
         axis = node.dim
         difference = query_point[axis] - point[axis]
 
         if distance == 0:
-            return node.label, 0
+            return node, 0
     
         if distance < best_dist:
             best_dist = distance
-            best_guess = node.label
+            best_guess = node
 
         axis = node.dim
         difference = query_point[axis] - point[axis]
@@ -124,8 +123,11 @@ def kdtree_1nn_classifier(X_train, y_train, X_test):
     predictions = []
     tree = KDTree(X_train, y_train)
     for query_point in X_test:
-        pred_label = tree.find_nearest_neighbor(query_point)
-        predictions.append(pred_label)
+        nearest = tree.find_nearest_neighbor(query_point)
+        if hasattr(nearest, "label"):
+            predictions.append(nearest.label)
+        else:
+            predictions.append(nearest)
     return np.array(predictions)
 
 

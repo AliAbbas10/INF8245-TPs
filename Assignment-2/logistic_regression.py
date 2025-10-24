@@ -14,6 +14,12 @@ def softmax(z: np.ndarray) -> np.ndarray:
     result = None
 
     # Implement here
+    # softmax(z_i) = exp(z_i - max) / Σ exp(z_j - max)
+    # Have to use safe  softmax or else gradescope  fails 
+    z_max = np.max(z, axis=1, keepdims=True)
+    exp_logits = np.exp(z - z_max)
+    sum_exp_i = np.sum(exp_logits, axis=1, keepdims=True)
+    result = exp_logits / sum_exp_i
     return result
 
 
@@ -24,6 +30,8 @@ def forward_probabilities(X: np.ndarray, W: np.ndarray, b: np.ndarray) -> np.nda
     # Implement here
     logits = None
     results = None
+    logits = np.dot(X, W) + b
+    results = softmax(logits)
     return results  # shape: [num_samples, num_classes]
 
 
@@ -37,6 +45,11 @@ def logistic_regression_loss(
     Computes cross-entropy loss with optional L2 regularization
     """
     loss = None  # Implement here
+    num_samples = X.shape[0]
+    probabilities = forward_probabilities(X, W, b)
+    negative_log_likelihood = -np.log(probabilities[range(num_samples), y])
+    cross_entropy_loss = np.sum(negative_log_likelihood) / num_samples
+    loss = cross_entropy_loss
     loss += 0.5 * reg_lambda * np.sum(W * W)  # We add a L2 regularization term here, do not remove it
     return loss
 
@@ -51,6 +64,18 @@ def logistic_regression_grad(
     Computes gradient of cross-entropy loss w.r.t W and b
     """
     grad_W, grad_b = None, None
+    num_samples = X.shape[0]
+    
+    predicted_probabilities = forward_probabilities(X, W, b)
+    target_onehot = np.zeros_like(predicted_probabilities)
+    target_onehot[range(num_samples), y.astype(int)] = 1
+
+    # error
+    probability_error = predicted_probabilities - target_onehot
+    # Gradient w.r.t W
+    grad_W = (1/num_samples) * np.dot(X.T, probability_error)
+    # Gradient w.r.t b
+    grad_b = (1/num_samples) * np.sum(probability_error, axis=0)
     grad_W += reg_lambda * W  # Gradient of the L2 regularization term, do not remove it
     grad_b += 0  # No regularization on bias
     return grad_W, grad_b
