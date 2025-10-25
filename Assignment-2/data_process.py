@@ -25,6 +25,7 @@ def preprocess_mnist_data(train_file_path: str, test_file_path: str):
 
     # TODO: Implement data preprocessing steps
 
+    # I cannot fix the gradescope error and still respect the float16 requirement ??!!
     data_test = pd.read_csv(test_file_path, header=None).values
     data_train = pd.read_csv(train_file_path, header=None).values
     

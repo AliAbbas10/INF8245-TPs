@@ -167,23 +167,17 @@ if __name__ == "__main__":
         val_accuracy_per_k[k] = knn_classifier(X_train, y_train, X_val, y_val, k, euclidean_distance)
         print(f"Validation accuracy of {val_accuracy_per_k[k]} % for k={k}")
 
+    print(f"\nEUCLIDEAN DISTANCE")
+    for k in [1, 2, 3, 4, 5, 10, 20]:
+        print(f"{k}\t{val_accuracy_per_k[k]} %")
+
     best_k = max(val_accuracy_per_k, key=val_accuracy_per_k.get)
     print(f"Best validation accuracy of {val_accuracy_per_k[best_k]} % for k={best_k}")
 
-    test_accuracy_per_k = {}
     print("Running on the test set...")
-    for k in [1, 2, 3, 4, 5, 10, 20]:
-        print(f"Calculating test accuracy for k={k}")
-        test_accuracy_per_k[k] = knn_classifier(X_train, y_train, X_test, y_test, k, euclidean_distance)
-        print(f"Test accuracy of {test_accuracy_per_k[k]} % for k={k}")
+    test_accuracy = knn_classifier(X_train, y_train, X_test, y_test, best_k, euclidean_distance)
+    print(test_accuracy)
 
-    best_k_test = max(test_accuracy_per_k, key=test_accuracy_per_k.get)
-    print(f"Best test accuracy of {test_accuracy_per_k[best_k_test]} % for k={best_k_test}")
-
-    print("\n" + "="*50)
-    print("COSINE DISTANCE EXPERIMENTS")
-    print("="*50)
-    
     # Do the same for cosine distance
     val_accuracy_per_k_cosine = {}
     
@@ -192,19 +186,15 @@ if __name__ == "__main__":
         val_accuracy_per_k_cosine[k] = knn_classifier(X_train, y_train, X_val, y_val, k, cosine_distance)
         print(f"Validation accuracy of {val_accuracy_per_k_cosine[k]} % for k={k}")
 
+    print(f"\nCOSINE DISTANCE")
+    for k in [1, 2, 3, 4, 5, 10, 20]:
+        print(f"{k}\t{val_accuracy_per_k_cosine[k]} %")
+
     best_k_cosine = max(val_accuracy_per_k_cosine, key=val_accuracy_per_k_cosine.get)
     print(f"Best validation accuracy of {val_accuracy_per_k_cosine[best_k_cosine]} % for k={best_k_cosine}")
 
-    test_accuracy_per_k_cosine = {}
-    print("Running on the test set with cosine distance")
-    for k in [1, 2, 3, 4, 5, 10, 20]:
-        print(f"Calculating test accuracy for k={k}")
-        test_accuracy_per_k_cosine[k] = knn_classifier(X_train, y_train, X_test, y_test, k, cosine_distance)
-        print(f"Test accuracy of {test_accuracy_per_k_cosine[k]} % for k={k}")
+    test_accuracy_cosine = knn_classifier(X_train, y_train, X_test, y_test, best_k_cosine, cosine_distance)
+    print(test_accuracy_cosine)
 
-    best_k_test_cosine = max(test_accuracy_per_k_cosine, key=test_accuracy_per_k_cosine.get)
-    print(f"Best test accuracy of {test_accuracy_per_k_cosine[best_k_test_cosine]} % for k={best_k_test_cosine}")
-    
-    print("SUMMARY")
-    print(f"Euclidean Distance: Best k={best_k_test}, Test accuracy={test_accuracy_per_k[best_k_test]:.1f}%")
-    print(f"Cosine Distance: Best k={best_k_test_cosine}, Test accuracy={test_accuracy_per_k_cosine[best_k_test_cosine]:.1f}%")
+    print(f"Euclidean Distance: Best k={best_k}, Test accuracy={test_accuracy:.2f}%")
+    print(f"Cosine Distance: Best k={best_k_cosine}, Test accuracy={test_accuracy_cosine:.2f}%")
