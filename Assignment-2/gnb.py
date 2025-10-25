@@ -83,6 +83,8 @@ def gnb_classifier(train_set, train_labels, test_set, test_labels, smoothing=1e-
 # -----------------------
 if __name__ == "__main__":
     from data_process import preprocess_mnist_data
+    from utils import visualize_image
+    import matplotlib.pyplot as plt
     import numpy as np
 
     # MNIST dataset (from CSVs prepared by data_download.py)
@@ -91,8 +93,37 @@ if __name__ == "__main__":
     )
 
     print("Evaluating on MNIST...")
+
+    num_mnist_classes = len(np.unique(y_train_mnist))
     gnb_acc_mnist = gnb_classifier(X_train_mnist, y_train_mnist, X_test_mnist, y_test_mnist)
+    class_priors, class_means, class_variances = gnb_fit_classifier(X_train_mnist, y_train_mnist)
+    mnist_predictions = gnb_predict(X_test_mnist, class_priors, class_means, class_variances, num_mnist_classes)
+    
+    mnist_accuracy = np.mean(mnist_predictions == y_test_mnist) * 100.0
     print(f"MNIST - GNB accuracy: {gnb_acc_mnist:.2f} %")
+    
+    print("Perclass error rates for MNIST:")
+    for digit_class in range(10):
+        test_samples_mask = y_test_mnist == digit_class
+        predicted_labels = mnist_predictions[test_samples_mask]
+        true_labels = y_test_mnist[test_samples_mask]
+        
+        if len(true_labels) > 0:
+            class_error_rate = (1 - np.mean(predicted_labels == true_labels)) * 100
+    
+    class_1_indices = np.where(y_test_mnist == 1)[0]
+    correct_class_1 = class_1_indices[mnist_predictions[class_1_indices] == 1]
+
+    if len(correct_class_1) > 0:
+        idx = correct_class_1[0]
+        visualize_image(X_test_mnist[idx], y_test_mnist[idx])
+        
+        # plt.figure(figsize=(5, 5))
+        # image = X_test_mnist[idx].reshape(15, 15)
+        # plt.imshow(image, cmap='gray')
+        # plt.axis('off')
+        # plt.savefig('class_1_example.png')
+        # plt.close()
 
     # IRIS dataset (CSV created by data_download.py): last column is label
     train_iris = np.loadtxt("data/iris/iris_train.csv", delimiter=",")

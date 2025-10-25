@@ -9,7 +9,7 @@
 \usepackage{amsfonts}
 \usepackage{mathtools} 
 
-\newcommand{\course}{INF8245 — Machine Learning}
+\newcommand{\course}{INF8245AE Machine Learning}
 \newcommand{\assignment}{Assignment #2}
 \newcommand{\university}{Polytechnique Montréal}
 
@@ -31,7 +31,7 @@
     {\Huge\bfseries \titletext \par}
     \vspace{2cm}
 
-    {\Large Ali Abbas \textemdash\ Student ID: 2078188 \par}
+    {\Large Ali Abbas \\ Student ID: 2078188 \par}
     \vspace{2cm}
 
     {\large \supervisor \par}
@@ -43,7 +43,58 @@
 \pagenumbering{arabic}
 
 \newpage
-\section*{Theory: a special case of Stone's theorem}
+
+\section*{K-Nearest Neighbors}
+\label{sec:knn}
+
+\textbf{2 (a) (b):}\\
+\textbf{Validation Set Results:}
+\begin{enumerate}
+
+\begin{center}
+\begin{tabular}{|c|c|c|c|c|c|c|c|}
+\hline
+\textbf{Distance} & \textbf{k=1} & \textbf{k=2} & \textbf{k=3} & \textbf{k=4} & \textbf{k=5} & \textbf{k=10} & \textbf{k=20} \\
+\hline
+Euclidean & 97.12\% & 96.67\% & 97.20\% & 97.26\% & 97.19\% & 97.02\% & 96.41\% \\
+\hline
+Cosine & 97.50\% & 97.14\% & 97.55\% & 97.61\% & 97.60\% & 97.35\% & 97.06\% \\
+\hline
+\end{tabular}
+\end{center}
+
+\end{enumerate}
+\textbf{Test Set Results:}
+\begin{enumerate}
+\textbf{Euclidean Distance:} Best $k = 3$, test accuracy: 96.81\%\\
+
+\textbf{Cosine Distance:} Best $k = 3$, test accuracy: 97.22\%
+\end{enumerate}
+\textbf{Trend Commentary:}
+\begin{enumerate}
+Cosine distance performs better than Euclidean distance with all $k$ values. Both methods show a decline in accuracy when $k$ increases beyond the optimal values of $k=3$ or $k=4$ on the validation set, likely due to noise from distant neighbors.
+\end{enumerate}
+\textbf{3 (b):}\\
+\textbf{Time and space complexity of the building tree:}
+
+My implementation does the follwoing:
+\begin{enumerate}
+\item Select the dimension to split based on the depth
+\item Sort the points using {numpy.argsort} on the selected dimension
+\item Recursively build left and right subtrees
+\end{enumerate}
+
+\textbf{Time Complexity:} $O(n \log^2 n)$\\
+At each level of recursion, I used \texttt{np.argsort} to find the median along the selected dimension, which requires sorting the points and takes $O(n \log n)$ time. Since the tree has a depth of $O(\log n)$ due to halving up to level k, the total time complexity becomes $O(n \log n) \times O(\log n) = O(n \log^2 n)$.
+
+\textbf{Space Complexity:} $O(n)$
+\\ At each depth of recursion I store half of the points for left and right subtrees, $n, n/2, ..., n/2^k (k = depth)$ which sums to linear space O(n).
+\\\\
+\textbf{3 (c):}\\
+\textbf{Time complexity of traversing the tree:} $O(n)$\\
+Assuming a worst case scenario where the algorithm would need to traverse from depth 0 to k the time complexity would be $O(k)$.
+\\\\\textbf{3 (d):}\\
+The test accuracy using the KD-tree is $100\%$
 \label{sec:stone}
 
 \subsection*{Question 4}
@@ -52,7 +103,7 @@
 Show that for any classifier G, $R(G) = \mathbb{E}[\eta(X)1_{G(X)=0} + (1 - \eta(X))1_{G(X)=1}]$\\ where $\eta(x) = P(g = 1 | X = x)$.\\
 \begin{align}
 R(G) &= \mathbb{E}_{X, g \thicksim v}[1_{G(X) \neq g}]\nonumber\\
-R(G) &= \mathbb{E}[\mathbb{E}[1_{G(X)\neq g} | X]] \:\:\: \text{(Conditional Expectation)}\\\nonumber\\
+R(G) &= \mathbb{E}[\mathbb{E}[1_{G(X)\neq g} | X]] \:\: \text{(Conditional Expectation)}\\\nonumber\\
 1_{G(X)\neq g} &= 1_{G(X)=0, g=1} + 1_{G(X)=1, g=0}\nonumber\\
 \mathbb{E}[1_{G(X)\neq g} | X = x] &= \mathbb{E}[1_{G(X)=0, g=1} + 1_{G(X)=1, g=0} | X = x]\nonumber\\
 &= P(G(X)=0, g=1 | X = x) + P(G(X)=1, g=0 | X = x)\nonumber\\
@@ -226,5 +277,106 @@ $\frac{2}{k} \to 0$, $\mathbb{E}[\sum_{i=1}^{n} w_{n,i}(X)1_{\|X_i - X\| \geq \d
 Therefore, $\mathbb{E}[(\eta(x) - \hat{\eta}_n(X))^2] \to 0$.
 
 \end{enumerate}
+
+
+
+\section*{Logistic Regression}
+\label{sec:logistic}
+\begin{enumerate}
+    \item[(a)]\\
+    \textbf{Gradient with respect to W:}
+\begin{align*}
+\frac{\partial L}{\partial W} &= -\frac{1}{N}\sum_{i=1}^{N} \frac{\partial}{\partial W} \log P(g_i|X_i)\\
+&= -\frac{1}{N}\sum_{i=1}^{N} \frac{1}{P(g_i|X_i)} \frac{\partial P(g_i|X_i)}{\partial W}\\
+&= \frac{1}{N}\sum_{i=1}^{N} X_i \left(\frac{e^{W^T X_i + b}}{\sum_{j=1}^{K} e^{W_j^T X_i + b_j}} - \mathbf{1}_{g_i}\right)^T\\
+&= \frac{1}{N} X^T \left(\frac{e^{WX + b}}{\sum_{j=1}^{K} e^{W_j^T X + b_j}} - Y\right)
+\end{align*}
+
+\textbf{Gradient with respect to b:}
+\begin{align*}
+    \frac{\partial L}{\partial b} &= -\frac{1}{N}\sum_{i=1}^{N} \frac{\partial}{\partial b} \log P(g_i|X_i)\\
+    &= \frac{1}{N}\sum_{i=1}^{N} \left(\frac{e^{W^T X_i + b}}{\sum_{j=1}^{K} e^{W_j^T X_i + b_j}} - \mathbf{1}_{g_i}\right)\\
+    &= \frac{1}{N}\left(\frac{e^{WX + b}}{\sum_{j=1}^{K} e^{W_j^T X + b_j}} - Y\right)
+\end{align*}
+(Y is the target)
+\item[(e)]\\
+Test Results: The best lambda is 0, and the test accuracy is: 0.9482\\
+Plot: evolution of the accuracy on the validation set\\
+\includegraphics[width=1\textwidth]{logistic_regression_validation_accuracy.png}\\
+    The lambda hyperparameter controls the strength of regularization. A higher lambda value increases the penalty on large wights, which reduces complexity and overfitting.
+    According to the test results the best lambda is 0, indicating that no regularization is needed for this dataset.
+    \end{enumerate}
+
+\section*{Gaussian Naive Bayes}
+\label{sec:gnb}
+\begin{enumerate}
+        \item[(a)]
+\begin{align*}
+P(g = k|X) &= \frac{P(X|g = k)P(g = k)}{P(X)}\\
+\log P(g = k|X) &= \log\left(\frac{P(X|g = k)P(g = k)}{P(X)}\right)\\
+&= \log P(X|g = k) + \log P(g = k) - C(X)\\
+\text{where }C(X) &= \log P(X)
+\end{align*}
+       \item[(b)]\\
+       The log-likelihood for class $k$ is:
+       \begin{align*}
+       \log L &= \sum_{i|g_i=k} \log P(X_i|g = k)\\
+       &= \sum_{i|g_i=k} \log \mathcal{N}(X| \mu_k, \Sigma_k)\\
+       &= \sum_{i|g_i=k} \left[-\frac{d}{2}\log(2\pi) - \frac{1}{2}\log|\Sigma_k| - \frac{1}{2}(X_i - \mu_k)^T\Sigma_k^{-1}(X_i - \mu_k)\right]
+       \end{align*}
+       
+       With diagonal $\Sigma_k = \text{diag}(\sigma_1^{(k)} \ldots \sigma_d^{(k)})$:
+       \begin{align*}
+       \log L_k &= \sum_{i|g_i=k} \left[-\frac{d}{2}\log(2\pi) - \frac{1}{2}\sum_{j=1}^d \log(\sigma_j^{(k)})^2 - \frac{1}{2}\sum_{j=1}^d \frac{(X_{ij} - \mu_{kj})^2}{(\sigma_j^{(k)})^2}\right]
+       \end{align*}
+       
+       \textbf{Optimizing for $\mu_k$:}
+       \begin{align*}
+       \frac{\partial \log L_k}{\partial \mu_{kj}} &= \sum_{i|g_i=k} \frac{X_{ij} - \mu_{kj}}{(\sigma_j^{(k)})^2} = 0\\
+       \mu_{kj} &= \frac{1}{N_k}\sum_{i|g_i=k} X_{ij}\\
+       \mu_k &= \frac{1}{N_k}\sum_{i|g_i=k} X_i
+       \end{align*}
+       
+       \textbf{Optimizing for $\Sigma_k/\sigma_j$:}
+       \begin{align*}
+       \frac{\partial \log L_k}{\partial (\sigma_j^{(k)})^2} &= \sum_{i|g_i=k} \left[-\frac{1}{2(\sigma_j^{(k)})^2} + \frac{(X_{ij} - \mu_{kj})^2}{2((\sigma_j^{(k)})^2)^2}\right] = 0\\
+       (\sigma_j^{(k)})^2 &= \frac{1}{N_k}\sum_{i|g_i=k} (X_{ij} - \mu_{kj})^2\\
+       \Sigma_k &= \frac{1}{N_k}\sum_{i|g_i=k} (X_i - \mu_k)(X_i - \mu_k)^T
+       \end{align*}
+        \item[(e)]\\
+        \textbf{GNB Test Results:}
+
+        \textbf{MNIST Dataset:} accuracy: 74.69\%
+
+        \textbf{IRIS Dataset:} accuracy: 100.00\%
+
+        \textbf{Per class error rates for MNIST:}
+        \begin{center}
+        \begin{tabular}{|c|c|c|c|c|c|}
+        \hline
+        \textbf{Class} & 0 & 1 & 2 & 3 & 4 \\
+        \hline
+        \textbf{Error Rate} & 22.76\% & 7.22\% & 32.95\% & 54.46\% & 10.59\% \\
+        \hline
+        \end{tabular}
+        \end{center}
+
+        \begin{center}
+        \begin{tabular}{|c|c|c|c|c|c|}
+        \hline
+        \textbf{Class} & 5 & 6 & 7 & 8 & 9 \\
+        \hline
+        \textbf{Error Rate} & 31.05\% & 11.69\% & 23.74\% & 11.29\% & 48.46\% \\
+        \hline
+        \end{tabular}
+        \end{center}
+        
+        \begin{center}
+        \includegraphics[width=0.3\textwidth]{class_1.png}
+        \end{center}
+
+        Class 1 has the lowest error rate (7.22\%) (highest accuracy) due to its simple vertical shape. GNB works better on IRIS (100\% accuracy) because its features are independent, while MNIST's classes (or shapes) are most likely correlated which does not fit well with GNB's assumptions. KNN outperforms GNB on MNIST by considering local patterns without distributional constraints, in other words it works best given that it has no assumptions about the distribution only about local smoothness (or the local neighborhood of points).
+
+    \end{enumerate}
 
 \end{document}

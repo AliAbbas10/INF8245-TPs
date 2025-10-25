@@ -138,7 +138,7 @@ if __name__ == "__main__":
     # Load and preprocess the MNIST dataset
     # X_train, y_train, X_test, y_test, mean, std = preprocess_mnist_data("data/MNIST/train.csv", "data/MNIST/t10k.csv")
     X_train, y_train, X_test, y_test, mean, std = preprocess_credit_card(
-        "Assignment-2/data/credit_card_fraud/credit_card_fraud_train.csv", "Assignment-2/data/credit_card_fraud/credit_card_fraud_test.csv"
+        "data/credit_card_fraud/credit_card_fraud_train.csv", "data/credit_card_fraud/credit_card_fraud_test.csv"
     )
     print("Data loaded and preprocessed.")
     print("Training set shape:", X_train.shape)

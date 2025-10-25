@@ -1,5 +1,6 @@
 import numpy as np
 from typing import Tuple
+import matplotlib.pyplot as plt
 
 np.random.seed(42)
 
@@ -177,3 +178,21 @@ if __name__ == "__main__":
     y_test_pred = predict(X_test, W_best, b_best)
     test_acc = np.mean(y_test_pred == y_test)
     print(f"\nBest lambda: {best_lambda}, Test accuracy: {test_acc:.4f}")
+
+    plt.figure(figsize=(10, 5))
+
+    lambda_values = sorted(results.keys())
+    colors = ['black', 'green', 'purple', 'red', 'blue']
+    
+    for i, val_lambda in enumerate(lambda_values):
+        _, _, val_iters, val_acc_list = results[val_lambda]
+        plt.plot(val_iters, val_acc_list, color=colors[i], label=f'lambda = {val_lambda}', linewidth=1, markersize=5)
+
+
+    plt.xlabel('Number of Iterations')
+    plt.ylabel('Validation Accuracy')
+    plt.legend()
+    plt.grid(True, alpha=0.5)
+    plt.savefig('logistic_regression_validation_accuracy.png')
+    plt.tight_layout()
+    plt.show()
