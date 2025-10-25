@@ -156,7 +156,7 @@ Show that $\mathbb{E}[(\eta(x) - \hat{\eta}_n(X))^2] \leq 2\mathbb{E}[(\eta(x) -
 	 &= 2\mathbb{E}[(\eta(x) - \tilde{\eta}_n(X))^2] + 2\mathbb{E}[(\tilde{\eta}_n(X) - \hat{\eta}_n(X))^2]\\
 	%  \shortintertext{Using 2ab \leq a^2 + b^2}\\
 	\end{align*}
-\item[(b)] Show that $\mathbb{E}[(\eta(X) - \tilde{\eta}_n(X))^2] \leq \varepsilon^2 + \mathbb{E}\left[\sum_{i=1}^{n} w_{n,i}(X)1_{\|X_i - X\| \geq \delta}\right]$.
+\item[(b)] Show that $\mathbb{E}[(\eta(X) - \tilde{\eta}_n(X))^2] \leq \varepsilon + \mathbb{E}[\sum_{i=1}^{n} w_{n,i}(X)1_{\|X_i - X\| \geq \delta}]$.
 
 \begin{align*}
 \eta(X) - \tilde{\eta}_n(X) &= \eta(X) - \sum_{i=1}^n w_{n,i}(X) \eta(X_i)\\
@@ -176,6 +176,54 @@ Since $\sum_{i=1}^n w_{n,i}(X) = 1$, Jensen's inequality:
 \end{align*}
 
 $(\varepsilon, \delta)$-definition of limit: If $\eta$ is continuous, then for every $\varepsilon > 0$, there exists $\delta > 0$ such that for all $p: $\|x - p\| < \delta \Rightarrow |\eta(x) - \eta(p)| < \epsilon$\\
+\begin{align*}
+\mathbb{E}[(\eta(X) - \tilde{\eta}_n(X))^2] &\leq \mathbb{E}[\sum_{i=1}^n w_{n,i}(X)\varepsilon^2 1_{\|X_i - X\| < \delta}] + \mathbb{E}[\sum_{i=1}^n w_{n,i}(X) \cdot 1 \cdot 1_{\|X_i - X\| \geq \delta}]\\
+&\leq \mathbb{E}[\sum_{i=1}^n w_{n,i}(X)\varepsilon^2] + \mathbb{E}[\sum_{i=1}^n w_{n,i}(X)1_{\|X_i - X\| \geq \delta}]\\
+&\leq \varepsilon^2 \mathbb{E}[\sum_{i=1}^n w_{n,i}(X)] + \mathbb{E}[\sum_{i=1}^n w_{n,i}(X)1_{\|X_i - X\| \geq \delta}]\\
+\mathbb{E}[(\eta(X) - \tilde{\eta}_n(X))^2] &\leq \varepsilon^2 + \mathbb{E}[\sum_{i=1}^n w_{n,i}(X)1_{\|X_i - X\| \geq \delta}]\\
+&= \varepsilon + \mathbb{E}[\sum_{i=1}^{n} w_{n,i}(X)1_{\|X_i - X\| \geq \delta}] \text{ (since $\varepsilon$ can be close to null)}
+\end{align*}
+
+
+\item[(c)]  Show that $\mathbb{E}[(\tilde{\eta}_n(X) - \hat{\eta}_n(X))^2] = \mathbb{E}[\sum_{i=1}^{n} w_{n,i}^2(X)(g_i - \eta(X_i))^2]$\\
+\begin{align*}
+\tilde{\eta}_n(X) - \hat{\eta}_n(X) &= \sum_{i=1}^n w_{n,i}(X)\eta(X)  - \sum_{i=1}^n w_{n,i}(X)g_i\\
+&= \sum_{i=1}^n w_{n,i}(X)(\eta(X) - g_i)\\
+(\tilde{\eta}_n(X) - \hat{\eta}_n(X))^2 &= \Big(\sum_{i=1}^n w_{n,i}(X)(\eta(X) - g_i)\Big)^2\\
+\mathbb{E}[(\tilde{\eta}_n(X) - \hat{\eta}_n(X))^2] &= \mathbb{E}\Big[\Big(\sum_{i=1}^n w_{n,i}(X)(\eta(X) - g_i)\Big)^2\Big]\\
+\end{align*}
+
+Because $g_i \in [0,1]$, we have $(g_i - \eta(x_i))^2 \leq 1$ \\
+\begin{align*}
+\mathbb{E}[\sum_{i=1}^{n} w_{n,i}^2(x)(g_i - \eta(x_i))^2] &\leq \mathbb{E}[\sum_{i=1}^{n} w_{n,i}^2(x)].
+\end{align*}
+
+with the weights, $w_{n,i}(x) \in \{1/k, 0\}$
+\begin{align*}
+\sum_{i=1}^{n} w_{n,i}^2(x) &= k(\frac{1}{k})^2 = \frac{1}{k}.
+\end{align*}
+
+Since $\sum_{i} w_{n,i}(x) = 1$,
+\begin{align*}
+\sum_{i} w_{n,i}^2(x) &\leq \max_{i} w_{n,i}(x) = \frac{1}{k}.
+\end{align*}
+
+Therefore,
+\begin{align*}
+\mathbb{E}[(\tilde{\eta}(x) - \hat{\eta}_n(x))^2] &\leq \mathbb{E}[\max_{i} w_{n,i}] = \frac{1}{k}.
+\end{align*}
+
+\item[(d)]
+
+Combining parts (a) and (c):
+\begin{align*}
+\mathbb{E}[(\eta(x) - \hat{\eta}_n(X))^2] &\leq 2\varepsilon^2 + 2\mathbb{E}[\sum_{i=1}^{n} w_{n,i}(X)1_{\|X_i - X\| \geq \delta}] + \frac{2}{k}
+\end{align*}
+
+$k \to \infty$ and $\frac{k}{n} \to 0$ as $n \to \infty$, then:
+$\frac{2}{k} \to 0$, $\mathbb{E}[\sum_{i=1}^{n} w_{n,i}(X)1_{\|X_i - X\| \geq \delta}] \to 0$ and $\varepsilon$ can be close to null.
+
+Therefore, $\mathbb{E}[(\eta(x) - \hat{\eta}_n(X))^2] \to 0$.
 
 \end{enumerate}
 

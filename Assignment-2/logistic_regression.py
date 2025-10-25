@@ -14,7 +14,6 @@ def softmax(z: np.ndarray) -> np.ndarray:
     result = None
 
     # Implement here
-    # softmax(z_i) = exp(z_i - max) / Σ exp(z_j - max)
     # Have to use safe  softmax or else gradescope  fails 
     z_max = np.max(z, axis=1, keepdims=True)
     exp_logits = np.exp(z - z_max)
