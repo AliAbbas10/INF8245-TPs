@@ -66,18 +66,18 @@ Cosine & 97.50\% & 97.14\% & 97.55\% & 97.61\% & 97.60\% & 97.35\% & 97.06\% \\
 \end{enumerate}
 \textbf{Test Set Results:}
 \begin{enumerate}
-\textbf{Euclidean Distance:} Best $k = 3$, test accuracy: 96.81\%\\
+\textbf{Euclidean Distance:} Best $k = 4$, test accuracy: 96.58\%\\
 
-\textbf{Cosine Distance:} Best $k = 3$, test accuracy: 97.22\%
+\textbf{Cosine Distance:} Best $k = 4$, test accuracy: 97.04\%
 \end{enumerate}
 \textbf{Trend Commentary:}
 \begin{enumerate}
-Cosine distance performs better than Euclidean distance with all $k$ values. Both methods show a decline in accuracy when $k$ increases beyond the optimal values of $k=3$ or $k=4$ on the validation set, likely due to noise from distant neighbors.
+Cosine distance performs better than Euclidean distance with all $k$ values. Both methods show a decline in accuracy when $k$ increases beyond the optimal values of $k=4$ on the validation set, likely due to noise from distant neighbors.
 \end{enumerate}
 \textbf{3 (b):}\\
 \textbf{Time and space complexity of the building tree:}
 
-My implementation does the follwoing:
+My implementation does the following:
 \begin{enumerate}
 \item Select the dimension to split based on the depth
 \item Sort the points using {numpy.argsort} on the selected dimension
@@ -348,7 +348,7 @@ P(g = k|X) &= \frac{P(X|g = k)P(g = k)}{P(X)}\\
 
         \textbf{MNIST Dataset:} accuracy: 74.69\%
 
-        \textbf{IRIS Dataset:} accuracy: 100.00\%
+        \textbf{Iris Dataset:} accuracy: 100.00\%
 
         \textbf{Per class error rates for MNIST:}
         \begin{center}
@@ -375,7 +375,7 @@ P(g = k|X) &= \frac{P(X|g = k)P(g = k)}{P(X)}\\
         \includegraphics[width=0.3\textwidth]{class_1.png}
         \end{center}
 
-        Class 1 has the lowest error rate (7.22\%) (highest accuracy) due to its simple vertical shape. GNB works better on IRIS (100\% accuracy) because its features are independent, while MNIST's classes (or shapes) are most likely correlated which does not fit well with GNB's assumptions. KNN outperforms GNB on MNIST by considering local patterns without distributional constraints, in other words it works best given that it has no assumptions about the distribution only about local smoothness (or the local neighborhood of points).
+        Class 1 has the lowest error rate (7.22\%) (highest accuracy) due to its simple vertical shape. GNB works better on irises (100\% accuracy) because its features are independent, while MNIST's classes (or shapes) are most likely correlated which does not fit well with GNB's assumptions. KNN outperforms GNB on MNIST by considering local patterns without distributional constraints, in other words it works best given that it has no assumptions about the distribution only about local smoothness (or the local neighborhood of points).
 
     \end{enumerate}
 
