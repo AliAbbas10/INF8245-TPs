@@ -19,7 +19,7 @@ def data_splits(X, y):
     """
     # Use random_state = 0 in the train_test_split
     # TODO write data split here
-    X_train, X_test, y_train, y_test = None, None, None, None
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=0, shuffle=True)
 
     return X_train, X_test, y_train, y_test
 
@@ -32,7 +32,13 @@ def normalize_features(X_train, X_test):
     """
     # TODO write normalization here
     # Hint: Use MinMaxScaler, fit on training data, transform both train and test
-    X_train_scaled, X_test_scaled = None, None
+    
+    scaler = MinMaxScaler()
+    scaler.fit(X_train)
+    
+    X_train_scaled = pd.DataFrame(scaler.transform(X_train), columns=X_train.columns, index=X_train.index)
+    X_test_scaled = pd.DataFrame(scaler.transform(X_test), columns=X_test.columns, index=X_test.index)
+    
     return X_train_scaled, X_test_scaled
 
 
@@ -46,16 +52,17 @@ def train_model(model_name, X_train_scaled, y_train):
     '''
     if model_name == 'Decision Tree':
         # TODO call classifier here
-        cls = None
+        cls = DecisionTreeClassifier(random_state=0)
     elif model_name == 'Random Forest':
         # TODO call classifier here
-        cls = None
+        cls = RandomForestClassifier(random_state=0)
     elif model_name == 'SVM':
         # TODO call classifier here
-        cls = None
+        cls = SVC(random_state=0)
 
     # TODO train the model
-    # cls.fit(...)
+    # y_train_flat = y_train.values.ravel() if hasattr(y_train, 'values') else y_train
+    cls.fit(X_train_scaled, y_train)
 
     return cls
 
@@ -87,30 +94,30 @@ def eval_model(trained_models, X_train, X_test, y_train, y_test):
     for model_name, model in tqdm(trained_models.items()):
         # Predictions for training and testing sets
         # TODO predict y
-        y_train_pred = None
+        y_train_pred = model.predict(X_train)
         # TODO predict y
-        y_test_pred = None
+        y_test_pred = model.predict(X_test)
         # Calculate accuracy
         # TODO find accuracy
-        train_accuracy = None
+        train_accuracy = accuracy_score(y_train, y_train_pred)
         # TODO find accuracy
-        test_accuracy = None
+        test_accuracy = accuracy_score(y_test, y_test_pred)
         # Calculate F1-score
         # TODO find f1_score
-        train_f1 = None
+        train_f1 = f1_score(y_train, y_train_pred, average='weighted')
         # TODO find f1_score
-        test_f1 = None
+        test_f1 = f1_score(y_test, y_test_pred, average='weighted')
         # Store predictions
         # TODO
-        y_train_pred_dict[model_name] = None
+        y_train_pred_dict[model_name] = y_train_pred
         # TODO
-        y_test_pred_dict[model_name] = None  
+        y_test_pred_dict[model_name] = y_test_pred  
         # Store the evaluation metrics
         evaluation_results[model_name] = {
-            'Train Accuracy': None,
-            'Test Accuracy': None,
-            'Train F1 Score': None,
-            'Test F1 Score': None
+            'Train Accuracy': train_accuracy,
+            'Test Accuracy': test_accuracy,
+            'Train F1 Score': train_f1,
+            'Test F1 Score': test_f1
         }
     # Return the evaluation results
     return y_train_pred_dict, y_test_pred_dict, evaluation_results
@@ -131,9 +138,9 @@ def report_model(y_train, y_test, y_train_pred_dict, y_test_pred_dict):
 
         # Predictions for training and testing sets
         # TODO complete it
-        y_train_pred = None
+        y_train_pred = y_train_pred_dict[model_name]
         # TODO complete it
-        y_test_pred = None
+        y_test_pred = y_test_pred_dict[model_name]
         # Print classification report for training set
         print("\nTraining Set Classification Report:")
         # TODO write Classification Report train
@@ -154,7 +161,7 @@ def report_model(y_train, y_test, y_train_pred_dict, y_test_pred_dict):
 
 if __name__ == "__main__":
     # TODO call data preprocessing from q1
-    X, y = None, None
+    X, y = data_preprocessing()
     X_train, X_test, y_train, y_test = data_splits(X, y)
     X_train_scaled, X_test_scaled = normalize_features(X_train, X_test)
 
@@ -171,5 +178,35 @@ if __name__ == "__main__":
     # predict labels and calculate accuracy and F1score
     y_train_pred_dict, y_test_pred_dict, evaluation_results = eval_model(trained_models, X_train_scaled, X_test_scaled, y_train, y_test)
 
+    print("results:")
+    for model_name, metrics in evaluation_results.items():
+        print(f"\nModel: {model_name}")
+        print(f"Train Accuracy: {metrics['Train Accuracy']}")
+        print(f"Test Accuracy:  {metrics['Test Accuracy']}")
+        print(f"Train F1 Score: {metrics['Train F1 Score']}")
+        print(f"Test F1 Score:  {metrics['Test F1 Score']}")
+
     # classification report and calculate confusion matrix
     report_model(y_train, y_test, y_train_pred_dict, y_test_pred_dict)
+
+    import seaborn as sns
+    import matplotlib.pyplot as plt
+
+    for model_name in trained_models.keys():
+        y_test_pred = y_test_pred_dict[model_name]
+        conf_matrix = confusion_matrix(y_test, y_test_pred)
+        
+        fig, ax = plt.subplots(figsize=(5,5))
+        sns.heatmap(conf_matrix, annot=True, fmt='d', cmap='Blues', xticklabels=['≤50K', '>50K'], yticklabels=['≤50K', '>50K'], ax=ax)
+        ax.set_xlabel('Predicted')
+        ax.set_ylabel('Actual')
+        ax.set_title(f'Confusion Matrix: {model_name}')
+        filename = f'q2_confusion_matrix_{model_name.replace(" ", "_")}.png'
+        fig.savefig(filename)
+        plt.close(fig)
+
+    
+
+
+
+
