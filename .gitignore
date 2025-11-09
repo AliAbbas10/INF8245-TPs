@@ -4,4 +4,4 @@ results/
 **/*testing/
 Assignment-2/data**
 *.log
-
+Kaggle competition/data/**
