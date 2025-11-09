@@ -24,7 +24,7 @@ param_grid_random_forest = {
 }
 
 param_grid_svm = {
-    'kernel': ['linear', 'rbf'],
+    'kernel': ['linear', 'rbf', 'poly'],
     'C': [0.1, 1, 10],
     'tol': [1e-3, 1e-4],
     'gamma': ['scale', 'auto']
@@ -189,13 +189,13 @@ if __name__ == "__main__":
     test_accuracies = [dt_test_acc, rf_test_acc, svm_test_acc]
     
     plt.figure(figsize=(10, 5))
-    bars = plt.bar(model_names, test_accuracies, color=["#323b41", "#db4231", "#15944a"], alpha=0.5, edgecolor='black')
+    bars = plt.bar(model_names, test_accuracies, color=["#0D2B7E", "#db4231", "#15944a"], alpha=0.5)
     for bar, acc in zip(bars, test_accuracies):
         height = bar.get_height()
         plt.text(bar.get_x() + bar.get_width()/2., height, f'{acc:.5f}', ha='center', va='bottom')
     plt.xlabel('Model', fontsize=10)
     plt.ylabel('Test Accuracy', fontsize=10)
-    plt.title('Test Accuracy Comparison Across Models', fontsize=14, fontweight='bold')
+    plt.title('Test Accuracy across all three models', fontsize=10)
     plt.ylim([0, 1.0])
     plt.grid(True, alpha=0.5, axis='y')
     plt.tight_layout()
@@ -205,10 +205,10 @@ if __name__ == "__main__":
     
     grid_results = pd.DataFrame({
         'Model': ['Decision Tree', 'Random Forest', 'SVM'],
-        'Best_CV_Score': [best_score_decision_tree],
-        'Best_Parameters': [str(best_params_decision_tree)]
         'Best_CV_Score': [best_score_decision_tree, best_score_random_forest, best_score_svm],
-        'Best_Parameters': [str(best_params_decision_tree), str(best_params_random_forest), str(best_params_svm)]
+        'Best_Parameters': [str(best_params_decision_tree), str(best_params_random_forest), str(best_params_svm)],
+        # 'Best_CV_Score': [best_score_decision_tree, best_score_random_forest, best_score_svm],
+        # 'Best_Parameters': [str(best_params_decision_tree), str(best_params_random_forest), str(best_params_svm)]
     })
     grid_results.to_csv('q3_grid_search_results.csv', index=False)
     
