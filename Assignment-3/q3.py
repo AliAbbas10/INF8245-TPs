@@ -24,7 +24,7 @@ param_grid_random_forest = {
 }
 
 param_grid_svm = {
-    'kernel': ['linear', 'rbf', 'poly'],
+    'kernel': ['linear', 'rbf'],
     'C': [0.1, 1, 10],
     'tol': [1e-3, 1e-4],
     'gamma': ['scale', 'auto']
@@ -189,7 +189,7 @@ if __name__ == "__main__":
     test_accuracies = [dt_test_acc, rf_test_acc, svm_test_acc]
     
     plt.figure(figsize=(10, 5))
-    bars = plt.bar(model_names, test_accuracies, color=["#0D2B7E", "#db4231", "#15944a"], alpha=0.5)
+    bars = plt.bar(model_names, test_accuracies, color=["#0D2B7E", "#db4231", "#15944a"])
     for bar, acc in zip(bars, test_accuracies):
         height = bar.get_height()
         plt.text(bar.get_x() + bar.get_width()/2., height, f'{acc:.5f}', ha='center', va='bottom')
