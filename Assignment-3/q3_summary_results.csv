@@ -1,0 +1,2 @@
+Best_Model,Best_Test_Accuracy,DT_Test_Accuracy,RF_Test_Accuracy,SVM_Test_Accuracy,DT_Best_Params,RF_Best_Params,SVM_Best_Params
+SVM,0.8725560446309756,0.8590439144231754,0.8513665677141979,0.8725560446309756,"{'criterion': 'gini', 'max_depth': None, 'max_leaf_nodes': 100, 'min_samples_leaf': 1}","{'bootstrap': True, 'max_depth': None, 'n_estimators': 200}","{'C': 10, 'gamma': 'scale', 'kernel': 'linear', 'tol': 0.0001}"

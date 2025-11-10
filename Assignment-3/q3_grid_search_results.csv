@@ -1,0 +1,4 @@
+Model,Best_CV_Score,Best_Parameters
+Decision Tree,0.8521998871406046,"{'criterion': 'gini', 'max_depth': None, 'max_leaf_nodes': 100, 'min_samples_leaf': 1}"
+Random Forest,0.8499732980643356,"{'bootstrap': True, 'max_depth': None, 'n_estimators': 200}"
+SVM,0.8699357162524078,"{'C': 10, 'gamma': 'scale', 'kernel': 'linear', 'tol': 0.0001}"
