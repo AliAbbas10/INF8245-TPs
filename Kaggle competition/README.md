@@ -11,14 +11,14 @@ Place training and test data in the `data/` folder:
 - `train.npz`
 - `test.npz`
 
-## Usage
+## How to use
 
 Run `final.ipynb` to execute the complete pipeline:
 
-1. Feature selection:
+1. Feature selection
 2. Model training
 3. Submissions
 
-## Output Files
+## Output Files and Results
 
 Results are saved to CSV and PNG files including feature selection results, grid search configurations, visualizations, and submission files for each model.
