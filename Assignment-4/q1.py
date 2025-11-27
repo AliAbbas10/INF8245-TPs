@@ -126,7 +126,11 @@ class Dense(Layer):
         np.random.seed(33)
 
         # BEGIN SOLUTION
-        pass
+        input_dim = self.input_size
+        output_dim = self.output_size
+        xavier_bound = np.sqrt(6 / (input_dim + output_dim))
+        self.weights = np.random.uniform(-xavier_bound, xavier_bound, (input_dim, output_dim))
+        self.bias = np.zeros((1, output_dim))
         # END SOLUTION
 
     def forward(self, x):
@@ -140,7 +144,9 @@ class Dense(Layer):
         assert self.weights is not None, "Weights must be initialized before forward pass."
         assert self.bias is not None, "Bias must be initialized before forward pass."
         # BEGIN SOLUTION
-        pass
+        self.input = x
+        linear_output = x @ self.weights + self.bias
+        return linear_output
         # END SOLUTION
 
     def backward(self, output_grad):
@@ -160,7 +166,10 @@ class Dense(Layer):
         assert self.weights is not None, "Weights must be initialized before backward pass."
         assert self.bias is not None, "Bias must be initialized before backward pass."
         # BEGIN SOLUTION
-        pass
+        input_gradient = output_grad @ self.weights.T
+        self.weights_grad = self.input.T @ output_grad
+        self.bias_grad = np.sum(output_grad, axis=0, keepdims=True)
+        return input_gradient
         # END SOLUTION
 
     def update(self, learning_rate):
@@ -180,7 +189,8 @@ class Dense(Layer):
         assert self.weights_grad is not None, "Weights gradients must be computed before update."
         assert self.bias_grad is not None, "Bias gradients must be computed before update."
         # BEGIN SOLUTION
-        pass
+        self.weights -= learning_rate * self.weights_grad
+        self.bias -= learning_rate * self.bias_grad
         # END SOLUTION
 
 """
@@ -201,7 +211,13 @@ class SoftmaxLayer(Layer):
             output (np.ndarray): output of the layer, shape: (batch_size, input_size)
         """
         # BEGIN SOLUTION
-        pass
+        # Convert torch tensor to numpy (for the report plots error)
+        if hasattr(x, 'numpy'):
+            x = x.numpy()
+        shifted_logits = x - np.max(x, axis=1, keepdims=True)
+        exp_logits = np.exp(shifted_logits)
+        self.output = exp_logits / np.sum(exp_logits, axis=1, keepdims=True)
+        return self.output
         # END SOLUTION
 
     def backward(self, output_grad):
@@ -213,7 +229,15 @@ class SoftmaxLayer(Layer):
             input_grad (np.ndarray): gradient of the input of the layer (dx), shape: (batch_size, input_size)
         """
         # BEGIN SOLUTION
-        pass
+        batch_size, num_classes = self.output.shape
+        input_grad = np.zeros_like(output_grad)
+        
+        for sample_idx in range(batch_size):
+            softmax_output = self.output[sample_idx].reshape(-1, 1)
+            jacobian_matrix = np.diagflat(softmax_output) - softmax_output @ softmax_output.T
+            input_grad[sample_idx] = output_grad[sample_idx] @ jacobian_matrix
+        
+        return input_grad
         # END SOLUTION
 
 
@@ -231,7 +255,10 @@ class TanhLayer(Layer):
             output (np.ndarray): output of the layer, shape: (batch_size, input_size)
         """
         # BEGIN SOLUTION
-        pass
+        exp_positive = np.exp(x)
+        exp_negative = np.exp(-x)
+        self.output = (exp_positive - exp_negative) / (exp_positive + exp_negative)
+        return self.output
         # END SOLUTION
 
     def backward(self, output_grad):
@@ -243,7 +270,8 @@ class TanhLayer(Layer):
             input_grad (np.ndarray): gradient of the input of the layer (dx), shape: (batch_size, input_size)
         """
         # BEGIN SOLUTION
-        pass
+        input_grad = output_grad * (1 - self.output ** 2)
+        return input_grad
         # END SOLUTION
 
 
@@ -260,7 +288,9 @@ class ReLULayer(Layer):
             output (np.ndarray): output of the layer, shape: (batch_size, input_size)
         """
         # BEGIN SOLUTION
-        pass
+        self.input = x
+        self.output = np.maximum(x, 0)
+        return self.output
         # END SOLUTION
 
     def backward(self, output_grad):
@@ -272,7 +302,8 @@ class ReLULayer(Layer):
             input_grad (np.ndarray): gradient of the input of the layer (dx), shape: (batch_size, input_size)
         """
         # BEGIN SOLUTION
-        pass
+        input_grad = output_grad * (self.input > 0)
+        return input_grad
         # END SOLUTION
 
 """
@@ -315,7 +346,19 @@ class CrossEntropyLossLayer(Layer):
         assert prediction.shape[0] == target.shape[0], "Batch size of prediction and target must match."
         assert ((prediction.sum(1) - 1.0) < 1e-6).all(), "Predictions must sum to 1 along the last axis."
         # BEGIN SOLUTION
-        pass
+        self.prediction = prediction
+        self.target = target
+        
+        batch_size = prediction.shape[0]
+        
+        epsilon = 1e-10
+        prediction_clipped = np.clip(prediction, epsilon, 1 - epsilon)
+        
+        correct_class_probs = prediction_clipped[np.arange(batch_size), target]
+        
+        loss = -np.mean(np.log(correct_class_probs))
+        
+        return loss
         # END SOLUTION
 
     def backward(self, output_grad):
@@ -328,5 +371,19 @@ class CrossEntropyLossLayer(Layer):
                 in particular, this is the gradient of the loss w.r.t. the `prediction` input of the forward pass.
         """
         # BEGIN SOLUTION
-        pass
+        batch_size = self.prediction.shape[0]
+        num_classes = self.prediction.shape[1]
+        
+        input_grad = np.zeros_like(self.prediction)
+        batch_indices = np.arange(batch_size)
+        
+        # Add numerical stability else gradescop fails
+        numerical_stability_epsilon = 1e-10
+        predictions = np.clip(self.prediction, numerical_stability_epsilon, 1 - numerical_stability_epsilon)
+        correct_class_predictions = predictions[batch_indices, self.target]
+        
+        input_grad[batch_indices, self.target] = -1 / (batch_size * correct_class_predictions)
+        input_grad *= output_grad
+        
+        return input_grad
         # END SOLUTION
