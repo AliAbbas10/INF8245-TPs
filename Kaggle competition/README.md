@@ -8,8 +8,8 @@ pip install -r requirements.txt
 
 Place training and test data in the `data/` folder:
 
-- `train.npz` (training features and labels)
-- `test.npz` (test features)
+- `train.npz`
+- `test.npz`
 
 ## Usage
 
